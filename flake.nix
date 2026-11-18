@@ -16,6 +16,10 @@
         pgfplots
         cm-super     # Type 1 Computer Modern for the T1-encoded charts
         latexmk
+        animate      # the demo GIF (frames in figs/demo/), plays in Acrobat/Okular
+        media9       # provides pdfbase.sty  } both needed
+        ocgx2        # provides ocgbase.sty  } by animate
+        zref         # zref-abspage, also needed by animate
       ]);
 
       toolsFor = pkgs: [
