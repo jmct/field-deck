@@ -1,0 +1,52 @@
+% Search interest over time: Lean vs. software verification.
+% Data: data/lean-trends.csv, data/software-verification-trends.csv
+% (monthly, Nov 2024 - Sep 2026; each series scaled to its own peak = 100).
+% Same plot-box size and tick-label column as leanloc.tex, so both charts
+% come out the same width on the slide.
+% The *-smooth.csv files are made from the raw CSVs by data/lowess.awk
+% (the Makefile regenerates them when the raw data changes).
+% Built by `make` to build/plots/trends.pdf.  By hand: cd plots && latexmk -pdf trends.tex
+\documentclass[border=8pt]{standalone}
+\input{style.tex}
+\tikzset{lbl/.style={font=\footnotesize, text=inkmuted, inner sep=2pt}}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  jmct axis,
+  scale only axis, width=11.6cm, height=6.3cm,
+  yticklabel style={text width=1.9em, align=right},
+  % x = months since Nov 2024 (row index in the CSVs)
+  xmin=0, xmax=22,
+  ymin=0, ymax=105,
+  xtick={2,5,8,11,14,17,20},
+  xticklabels={Jan '25,Apr '25,Jul '25,Oct '25,Jan '26,Apr '26,Jul '26},
+  ytick={0,25,50,75,100},
+  ylabel={Search interest (peak = 100)},
+  title={\footnotesize\color{inkmuted}Monthly search interest, Nov 2024 -- Sep 2026},
+  legend pos=north west,
+  legend style={fill=canvas, fill opacity=0.85, text opacity=1},
+  clip=false,
+]
+  % raw monthly values: dots only, no legend entry
+  \addplot[only marks, mark=*, mark size=1.5pt, series2, opacity=0.55, forget plot]
+    table[x=i, y=raw, col sep=comma]{data/software-verification-trends-smooth.csv};
+  \addplot[only marks, mark=*, mark size=1.5pt, series1, opacity=0.55, forget plot]
+    table[x=i, y=raw, col sep=comma]{data/lean-trends-smooth.csv};
+  % robust LOWESS curves (data/lowess.awk)
+  \addplot[jmct series 2, line width=1.6pt, smooth]
+    table[x=i, y=smooth, col sep=comma]{data/software-verification-trends-smooth.csv};
+  \addlegendentry{``software verification''}
+  \addplot[jmct series 1, line width=1.6pt, smooth]
+    table[x=i, y=smooth, col sep=comma]{data/lean-trends-smooth.csv};
+  \addlegendentry{``Lean programming language''}
+\end{axis}
+% fixed right padding so trends.pdf and leanloc.pdf have identical widths
+\path ([xshift=3pt]current axis.east);
+\node[anchor=north west, font=\tiny, text=inkmuted, align=justify, text width=11.6cm, inner xsep=0pt]
+  at ([yshift=-4pt]current axis.below south west)
+  {Dots: monthly values. Lines: robust LOWESS smoothing (local linear fit over the nearest 9 months, outliers down-weighted).
+   Each series is normalized to its own peak (= 100), so the two lines show the shape of each trend, not their relative volume.
+   Source: plots/data/lean-trends.csv and software-verification-trends.csv.};
+\end{tikzpicture}
+\end{document}

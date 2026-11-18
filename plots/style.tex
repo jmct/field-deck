@@ -1,0 +1,48 @@
+% plots/style.tex -- shared look for the standalone charts in plots/.
+%
+% Each chart does  \input{style.tex}  after \documentclass, then uses
+% `jmct axis' (and `jmct series N') in its axis options.  Colours are
+% copied from theme/beamercolorthemejmct.sty so charts sit on the slide
+% background without a visible box.
+\usepackage[T1]{fontenc}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{statistics}
+\pgfplotsset{compat=1.18}
+
+% Theme palette
+\definecolor{canvas}{RGB}{240,240,240}    % off-white: slide background
+\definecolor{ink}{RGB}{184,26,91}         % my-magenta: normal text
+\definecolor{inkmuted}{RGB}{60,60,60}     % dark-gray
+\definecolor{gridline}{RGB}{210,210,210}
+% Series colours, in order of use
+\definecolor{series1}{RGB}{0,125,179}     % dark-lucid-blue (accent)
+\definecolor{series2}{RGB}{184,26,91}     % my-magenta
+\definecolor{series3}{RGB}{160,160,160}   % light-gray
+\definecolor{series4}{RGB}{255,219,13}    % galois-yellow
+
+\pagecolor{canvas}
+
+\pgfplotsset{
+  jmct axis/.style={
+    width=13.5cm, height=8cm,
+    axis lines*=left,
+    axis line style={inkmuted},
+    tick style={inkmuted},
+    tick label style={font=\footnotesize, text=inkmuted},
+    label style={font=\small, text=inkmuted},
+    ymajorgrids, grid style={gridline},
+    legend style={draw=none, fill=none, font=\footnotesize, text=inkmuted},
+    legend cell align=left,
+    title style={at={(0,1)}, anchor=south west, align=left,
+                 text=ink, font=\small, yshift=4pt},
+    every axis plot/.append style={line join=round},
+  },
+  jmct series 1/.style={series1, line width=1.2pt, mark=none},
+  jmct series 2/.style={series2, line width=1.2pt, mark=none},
+  jmct series 3/.style={series3, line width=1.2pt, mark=none},
+}
+
+% Two-line chart title: bold headline, muted subtitle.
+\newcommand{\charttitle}[2]{\textbf{#1}\\[2pt]{\footnotesize\color{inkmuted}#2}}

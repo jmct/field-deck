@@ -1,0 +1,30 @@
+% Grouped bar chart with symbolic x labels, read from CSV.
+% Built by `make` to build/plots/bars.pdf.  By hand: cd plots && latexmk -pdf bars.tex
+\documentclass[border=8pt]{standalone}
+\input{style.tex}
+
+\pgfplotstableread[col sep=comma]{data/categories.csv}\categories
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  jmct axis,
+  ybar, bar width=14pt,
+  ymin=0, ymax=100,
+  enlarge x limits=0.1,
+  xtick=data,
+  x tick style={draw=none},
+  xticklabels from table={\categories}{label},
+  ylabel={Value},
+  title={\charttitle{Placeholder: before and after}{Replace data/categories.csv with real data}},
+  legend pos=north east,
+  legend image code/.code={\fill[#1] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);},
+  nodes near coords, nodes near coords style={font=\scriptsize, text=inkmuted},
+]
+  \addplot[fill=series3, draw=none] table[x expr=\coordindex, y=before]{\categories};
+  \addlegendentry{Before}
+  \addplot[fill=series1, draw=none] table[x expr=\coordindex, y=after]{\categories};
+  \addlegendentry{After}
+\end{axis}
+\end{tikzpicture}
+\end{document}

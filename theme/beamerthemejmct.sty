@@ -1,0 +1,167 @@
+% beamerthemejmct.sty -- jmct's beamer theme
+%
+% Usage:   \usetheme{jmct}
+%          \usetheme[titlesize=48]{jmct}   % smaller title for long titles
+%
+% The look: off-white canvas, serif (Computer Modern) text in magenta,
+% blue accents, a short blue bar to the left of every frame title, and
+% code in dark grey.  See README.md next to this file for the full tour.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemejmct}[2026/10/22 v1.0 jmct beamer theme]
+
+\mode<presentation>
+
+%% Options ------------------------------------------------------------
+\def\jmct@titlesize{88}
+\DeclareOptionBeamer{titlesize}{\def\jmct@titlesize{#1}}
+\ProcessOptionsBeamer
+% Leading is 29/44 of the size: 88pt type on a 58pt baseline grid.
+\edef\jmct@titleleading{\the\dimexpr29\dimexpr\jmct@titlesize pt\relax/44\relax}
+
+\usecolortheme{jmct}
+\usefonttheme{jmct}
+\useinnertheme{jmct}
+\useoutertheme{jmct}
+
+%% Accent helpers -----------------------------------------------------
+% \blueit{text}  -- text in the accent blue
+% \blueite{text} -- emphasised text in the accent blue
+\newcommand{\blueit}[1]{{\usebeamercolor[fg]{accent}#1}}
+\newcommand{\blueite}[1]{\blueit{\emph{#1}}}
+
+% \myquote{quotation}{who}{when} -- a quotation with a rule and attribution
+\newcommand{\myquote}[3]{%
+  ``#1''
+  \vspace{3pt}
+  \hrule
+  \begin{flushright}
+  --- \blueit{\emph{#2}}, \emph{#3}
+  \end{flushright}
+}
+
+%% Code ---------------------------------------------------------------
+\RequirePackage{listings}
+\RequirePackage{fancyvrb}
+
+% Highlighting in the theme palette.  Keywords take the accent blue,
+% comments recede, strings read as prose.
+\lstdefinestyle{jmct}{
+  basicstyle=\ttfamily,
+  keywordstyle=\usebeamercolor[fg]{accent},
+  commentstyle=\usebeamercolor[fg]{code comment}\itshape,
+  stringstyle=\usebeamercolor[fg]{code string},
+  columns=fullflexible,        % natural (verbatim) character widths
+  keepspaces=true,
+  showstringspaces=false,
+  aboveskip=0pt, belowskip=0pt,
+  escapeinside={(*@}{@*)},     % (*@ ... @*) is TeX, e.g. \onslide<2->
+  escapebegin=\mbox\bgroup, escapeend=\egroup,      % escapes in text mode
+}
+
+% Display code.  Any frame that contains one of these needs [fragile].
+%
+%   \begin{codeblock}[language=C]
+%   int current = atomic_load(target);   /* highlighted */
+%   \end{codeblock}
+%
+% The block is centred and set in the `code' colour.  Lines are taken
+% exactly as written, so start them in column 0 unless you want the
+% indentation.  The [...] takes listings keys:
+%   language=C, language=Haskell, morekeywords={type,where}
+%   basicstyle=\ttfamily\footnotesize          (smaller type)
+% Without a language nothing is highlighted.
+%
+% Overlays: anything between (*@ and @*) is ordinary TeX, so a line can
+% be revealed from step n with \onslide<n->, and text swapped with \alt:
+%
+%   \begin{codeblock}[language=Haskell]
+%   position : elem -> List elem -> (*@\alt<3>{Option Nat}{??????????}@*)
+%   (*@\onslide<2->@*)position a xs = pos xs 0
+%   \end{codeblock}
+%
+% \onslide keeps the line's space while hidden, so the block never jumps.
+\newsavebox{\jmct@codebox}
+\newdimen\jmct@codewd    % widest line so far
+\newdimen\jmct@linewd    % width of the current line
+\newdimen\jmct@linedp    % deepest ink on the current line
+\newdimen\jmct@firstht   % tallest ink on the first line
+\newdimen\jmct@lastdp    % deepest ink on the last inked line
+\newdimen\jmct@linepitch % baseline-to-baseline distance in the listing
+\newdimen\jmct@strutht   % strut height listings gives every line
+\newdimen\jmct@codeht    % height the finished box should have
+\newcount\jmct@trailing  % blank lines at the end (an indented \end leaves one)
+\newif\ifjmct@firstline
+\newif\ifjmct@lineink
+\lstnewenvironment{codeblock}[1][]
+  {\endgraf\nobreak   % like beamer's figure: start the list in vertical mode
+   \usebeamercolor[fg]{code}\lstset{style=jmct,#1}%
+   \global\jmct@codewd=\z@ \global\jmct@firstht=\z@ \global\jmct@lastdp=\z@
+   \global\jmct@trailing=\z@ \global\jmct@firstlinetrue
+   \setbox\jmct@codebox\vbox\bgroup}
+  {\egroup
+   % listings struts every line and may end with blank lines, so the raw
+   % box is (lines x pitch) tall with zero depth.  Give it the extent a
+   % verbatim box would have: from the first line's ink to the last
+   % line's ink, dropping trailing blank lines.  A vbox is drawn from
+   % its top, so the first line is also pulled up by the part of its
+   % strut that has no ink above it.
+   \jmct@codeht=\dimexpr\ht\jmct@codebox
+       -\jmct@trailing\jmct@linepitch-\jmct@linepitch+\jmct@firstht\relax
+   \setbox\jmct@codebox\vbox{%
+     \kern-\dimexpr\jmct@strutht-\jmct@firstht\relax\unvbox\jmct@codebox}%
+   \ht\jmct@codebox=\jmct@codeht
+   \dp\jmct@codebox=\jmct@lastdp
+   \wd\jmct@codebox=\jmct@codewd
+   \begin{center}\leavevmode\box\jmct@codebox\endgraf\nobreak\end{center}}
+% Measurement.  listings pads every line to the full width, so sizes
+% are taken as the lines are produced: every chunk it outputs goes
+% through \lst@OutputBox.  Chunks with width but no height are spaces;
+% the zero-width strut is ignored.
+\let\jmct@lst@OutputBox\lst@OutputBox%
+\def\lst@OutputBox#1{%
+  \global\advance\jmct@linewd\wd#1%
+  \ifdim\wd#1>\z@%
+    \ifdim\dimexpr\ht#1+\dp#1\relax>\z@%
+      \global\jmct@lineinktrue%
+      \ifjmct@firstline%
+        \ifdim\ht#1>\jmct@firstht\global\jmct@firstht=\ht#1\fi%
+      \fi%
+      \ifdim\dp#1>\jmct@linedp\global\jmct@linedp=\dp#1\fi%
+    \fi%
+  \fi%
+  \jmct@lst@OutputBox{#1}}%
+\lst@AddToHook{InitVarsBOL}{%
+  \global\jmct@linewd=\z@\global\jmct@linedp=\z@\global\jmct@lineinkfalse%
+  \global\jmct@linepitch=\baselineskip\global\jmct@strutht=\ht\strutbox}%
+\lst@AddToHook{EOL}{%
+  \ifdim\jmct@linewd>\jmct@codewd\global\jmct@codewd=\jmct@linewd\fi%
+  \global\jmct@firstlinefalse%
+  \ifjmct@lineink%
+    \global\jmct@trailing=\z@\global\jmct@lastdp=\jmct@linedp%
+  \else%
+    \global\advance\jmct@trailing\@ne%
+  \fi}
+
+% codeblock*: plain verbatim with beamer overlay commands live.  Kept
+% for decks written before codeblock grew escapes; new decks should use
+% codeblock with (*@ ... @*).  In here `\', `{' and `}' are commands, so
+% \uncover<2->{...} works per line; a literal backslash is \textbackslash.
+\newenvironment{codeblock*}{%
+  \VerbatimEnvironment
+  \begin{center}\usebeamercolor[fg]{code}%
+  % fancyvrb normally makes ` ' < > , - active (ligature suppression);
+  % beamer's <overlay> parser needs the real characters.
+  \let\@noligs\relax
+  \fvset{commandchars=\\\{\}}%
+  \begin{BVerbatim}}
+ {\end{BVerbatim}\end{center}}
+
+% Inline code: \code{Succ (Succ Z)}.  Typewriter, in the `code' colour,
+% and robust: it works inside \item<2->, \frametitle, footnotes, and
+% math (align, $...$).  Special characters (_ ^ & $ < > ~ \) print
+% literally; the only things it cannot take are unbalanced braces, `%'
+% (which starts a comment) and `#' (which comes out doubled).  For
+% those, fall back to \verb in a [fragile] frame.
+\newcommand{\code}[1]{{\usebeamercolor[fg]{code}\frenchspacing\texttt{\detokenize{#1}}}}
+
+\mode<all>

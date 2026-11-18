@@ -1,0 +1,28 @@
+% Scatter plot coloured by a group column, with a fitted trend line.
+% Built by `make` to build/plots/scatter.pdf.  By hand: cd plots && latexmk -pdf scatter.tex
+\documentclass[border=8pt]{standalone}
+\input{style.tex}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  jmct axis,
+  xmajorgrids,
+  xlabel={Input},
+  ylabel={Output},
+  title={\charttitle{Placeholder: two clusters}{Replace data/scatter.csv with real data}},
+  legend pos=north west,
+  scatter/classes={
+    0={mark=*, series1, fill opacity=0.6, draw opacity=0, mark size=2.2pt},
+    1={mark=*, series2, fill opacity=0.6, draw opacity=0, mark size=2.2pt}},
+]
+  \addplot[scatter, only marks, scatter src=explicit symbolic]
+    table[x=x, y=y, meta=group, col sep=comma]{data/scatter.csv};
+  \legend{Group 0, Group 1}
+
+  % Least-squares fit over all points (pgfplotstable computes it)
+  \addplot[inkmuted, dashed, line width=0.8pt, forget plot]
+    table[x=x, y={create col/linear regression={y=y}}, col sep=comma]{data/scatter.csv};
+\end{axis}
+\end{tikzpicture}
+\end{document}

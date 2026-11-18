@@ -1,0 +1,6 @@
+# Reference codebases: total lines of source, all languages (scc 4.1.0), shallow clone on 2026-11-18
+name,version,lines,code
+FFmpeg,master 2026-11-18,2147254,1669638
+CPython,main 2026-11-18,3123590,2422120
+LLVM,main 2026-11-18,44307224,21191415
+Linux kernel,v7.4-rc3,43920947,33463873

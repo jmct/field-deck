@@ -1,0 +1,29 @@
+% Line chart: several series against a shared x, read from CSV.
+% Built by `make` to build/plots/line.pdf.  By hand: cd plots && latexmk -pdf line.tex
+\documentclass[border=8pt]{standalone}
+\input{style.tex}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  jmct axis,
+  xmin=0, xmax=50, ymin=0, ymax=20,
+  xlabel={Step},
+  ylabel={Value},
+  title={\charttitle{Placeholder: three random walks}{Replace data/series.csv with real data}},
+  legend pos=south east, legend columns=3,
+  clip=false,
+]
+  \addplot[jmct series 1] table[x=x, y=a, col sep=comma]{data/series.csv};
+  \addlegendentry{Series A}
+  \addplot[jmct series 2] table[x=x, y=b, col sep=comma]{data/series.csv};
+  \addlegendentry{Series B}
+  \addplot[jmct series 3] table[x=x, y=c, col sep=comma]{data/series.csv};
+  \addlegendentry{Series C}
+
+  % Direct annotation pointing at a data coordinate
+  \draw[ink, line width=0.5pt, <-] (axis cs:40,15.06) -- (axis cs:34,18.5)
+    node[anchor=east, font=\scriptsize, inner sep=2pt] {an annotation};
+\end{axis}
+\end{tikzpicture}
+\end{document}

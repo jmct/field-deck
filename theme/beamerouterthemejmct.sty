@@ -1,0 +1,37 @@
+% beamerouterthemejmct.sty -- frame title for the jmct theme
+\ProvidesPackage{beamerouterthemejmct}[2026/10/22 v1.0 jmct beamer outer theme]
+
+\mode<presentation>
+
+\RequirePackage{tikz}
+
+\setbeamertemplate{navigation symbols}{}
+
+% Geometry of the frame title: a short vertical bar flush with the left
+% edge of the page, the title to its right.
+\newlength{\jmct@barwidth}   \setlength{\jmct@barwidth}{0.2cm}
+\newlength{\jmct@barheight}  \setlength{\jmct@barheight}{1.2cm}
+
+\defbeamertemplate*{frametitle}{jmct}{%
+  \vskip0.5cm%
+  \usebeamercolor{frametitle bar}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\jmct@barheight]{frametitle}
+    \begin{tikzpicture}
+      % The box is as wide as the page and starts at its left edge, so
+      % x=0 here is the page edge.
+      \useasboundingbox (0,0) rectangle (\paperwidth,\jmct@barheight);
+      \fill[color=frametitle bar.fg] (0,0) rectangle (\jmct@barwidth,\jmct@barheight);
+      \ifx\insertframesubtitle\@empty
+        \node[anchor=west] at (0.3cm,0.61cm)
+          {\usebeamerfont{frametitle}\insertframetitle};
+      \else
+        \node[anchor=west] at (0.2cm,0.81cm)
+          {\usebeamerfont{frametitle}\insertframetitle};
+        \node[anchor=west] at (0.4cm,0.25cm)
+          {\usebeamerfont{framesubtitle}-\insertframesubtitle};
+      \fi
+    \end{tikzpicture}
+  \end{beamercolorbox}
+}
+
+\mode<all>

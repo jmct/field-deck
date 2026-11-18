@@ -1,0 +1,20 @@
+# LaTeX build products
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+build/
+
+# nix / direnv
+result
+.direnv/
+
+# Images you add under figs/ are content, keep them
+!figs/**

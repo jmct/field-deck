@@ -1,0 +1,82 @@
+% Largest Lean project over time, with well-known codebases for scale.
+% Data: data/lean_mathlib.csv, data/lean_ai.csv, data/oss_reference.csv
+% (total lines incl. comments/blanks, counted with scc 4.1.0 on 2026-11-18).
+% Built by `make` to build/plots/leanloc.pdf.  By hand: cd plots && latexmk -pdf leanloc.tex
+\documentclass[border=8pt]{standalone}
+\input{style.tex}
+
+% Reference codebases (total lines, from data/oss_reference.csv)
+\def\ffmpeg{2147254}
+\def\cpython{3123590}
+\def\linux{43920947}
+\tikzset{lbl/.style={font=\footnotesize, text=inkmuted, inner sep=2pt},
+         ailbl/.style={lbl, anchor=east, fill=canvas, fill opacity=0.85, text opacity=1, inner sep=1.5pt, xshift=-5pt}}
+
+% Trend over the machine-generated points (data/lean_ai.csv): least-squares
+% quadratic fit of log10(lines) vs t = year - 2026, n=7, R^2=0.80.
+% (A polynomial on raw line counts fits badly, R^2~0.25-0.29, and goes negative.)
+\def\fita{5.0653}
+\def\fitb{2.0833}
+\def\fitc{-0.0610}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  jmct axis,
+  scale only axis, width=11.6cm, height=6.3cm,
+  yticklabel style={text width=1.9em, align=right},
+  ymode=log,
+  xmin=2017.5, xmax=2027,
+  ymin=1e4, ymax=1e8,
+  xtick={2018,2020,...,2026},
+  xticklabel style={/pgf/number format/1000 sep={}},
+  ytick={1e4,1e5,1e6,1e7,1e8},
+  yticklabels={10k,100k,1M,10M,100M},
+  ymajorgrids=false,
+  log basis y=10,
+  ylabel={Lines of Lean (log scale)},
+  title={\footnotesize\color{inkmuted}Lean lines per project; dashed lines: well-known open-source codebases, for scale},
+  clip=false,
+]
+  % --- reference codebases: horizontal markers, labelled at the left
+  \draw[series3, dashed, line width=0.8pt] (axis cs:2017.5,\linux)   -- (axis cs:2027,\linux)
+    node[lbl, pos=0, anchor=south west] {Linux kernel: 43.9M};
+  \draw[series3, dashed, line width=0.8pt] (axis cs:2017.5,\cpython) -- (axis cs:2027,\cpython)
+    node[lbl, pos=0, anchor=south west] {CPython: 3.1M};
+  \draw[series3, dashed, line width=0.8pt] (axis cs:2017.5,\ffmpeg)  -- (axis cs:2027,\ffmpeg)
+    node[lbl, pos=0, anchor=north west] {FFmpeg: 2.1M};
+
+  % --- mathlib: largest Lean project until 2026
+  \addplot[jmct series 1, line width=1.6pt]
+    table[x=year, y=largest, col sep=comma]{data/lean_mathlib.csv};
+  \node[lbl, align=center, anchor=east, text=series1, font=\footnotesize\bfseries]
+    at (axis cs:2020.1,4.4e5) {mathlib\\(2.5M lines today)};
+  \node[lbl, anchor=south east, font=\tiny]
+    at (axis cs:2023.4,1.25e6) {Lean 4 port};
+
+  % --- AI-driven formalizations
+  \addplot[only marks, mark=*, mark size=2.4pt, series2, draw=canvas, line width=0.6pt]
+    table[x=year, y=lines, col sep=comma]{data/lean_ai.csv};
+  % Qin et al. repo grew between two releases
+  \draw[series2, line width=0.8pt] (axis cs:2026.74,4722013) -- (axis cs:2026.87,7393782);
+
+  % trend line through the machine-generated points
+  \addplot[series2, line width=0.9pt, densely dashed, opacity=0.7, domain=2025.69:2027, samples=30]
+    {10^(\fita + \fitb*(x-2026) + \fitc*(x-2026)^2)};
+
+  \node[ailbl, text=ink] at (axis cs:2026.63,13499380) {Fermat's Last Theorem (Claude, Aug 2026): 13.5M};
+  \node[ailbl] at (axis cs:2026.87,7393782) {Poincar\'e + geometrization (Qin et al.): 4.7M \textrightarrow{} 7.4M};
+  \node[ailbl] at (axis cs:2026.76,3061775) {Poincar\'e (Zhang et al.): 3.1M};
+  \node[ailbl] at (axis cs:2026.69,641332)  {Navier--Stokes (OpenAI): 0.64M};
+  \node[ailbl] at (axis cs:2026.17,180661)  {Sphere packing (Math Inc): 0.18M};
+  \node[ailbl] at (axis cs:2025.69,28407)   {Strong PNT (Math Inc): 28k};
+\end{axis}
+% fixed right padding so trends.pdf and leanloc.pdf have identical widths
+\path ([xshift=3pt]current axis.east);
+\node[anchor=north west, font=\tiny, text=inkmuted, align=justify, text width=11.6cm, inner xsep=0pt]
+  at ([yshift=-4pt]current axis.below south west)
+  {Total lines of \texttt{*.lean} (or all source, for reference projects), incl.\ comments, counted with scc on each public repo, Nov 2026.
+   mathlib = larger of mathlib3/mathlib4 at quarterly snapshots. Fermat's Last Theorem alone is 5.7\texttimes{} all of mathlib (2.36M lines, Aug 2026).
+   Dashed magenta: quadratic least-squares fit of log(lines) vs.\ date over the 7 machine-generated points ($R^2=0.80$), implying growth of $\approx$100\texttimes{} per year (size doubling every $\approx$2 months).};
+\end{tikzpicture}
+\end{document}

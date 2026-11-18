@@ -1,0 +1,14 @@
+% beamerfontthemejmct.sty -- fonts for the jmct theme
+\ProvidesPackage{beamerfontthemejmct}[2026/10/22 v1.0 jmct beamer font theme]
+
+\mode<presentation>
+
+\usefonttheme{serif}
+
+% Title page title.  Defaults match \usetheme{jmct} with no options;
+% \usetheme[titlesize=<pt>]{jmct} overrides.
+\providecommand{\jmct@titlesize}{88}
+\providecommand{\jmct@titleleading}{58pt}
+\setbeamerfont{title}{size={\fontsize{\jmct@titlesize}{\jmct@titleleading}}}
+
+\mode<all>

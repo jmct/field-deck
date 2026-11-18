@@ -1,0 +1,25 @@
+% beamerinnerthemejmct.sty -- title page and list markers for the jmct theme
+\ProvidesPackage{beamerinnerthemejmct}[2026/10/22 v1.0 jmct beamer inner theme]
+
+\mode<presentation>
+
+% Title page: title and subtitle, vertically centred.  (Author and date
+% are deliberately not shown; put them in the subtitle if you want them.)
+\defbeamertemplate*{title page}{jmct}
+{
+  \vfill
+    {\centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \par
+    }
+    \vskip1cm%
+    {\centering
+      \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle
+      \par
+    }
+  \vfill
+}
+
+\setbeamertemplate{itemize items}[square]
+
+\mode<all>
