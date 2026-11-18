@@ -23,7 +23,7 @@
   <!-- Title -->
   <section class="cover dark" data-state="st-dark">
     <div class="frame">
-      <div class="motif" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="splash" aria-hidden="true"><i></i><i></i></div>
       <h1 class="wordmark">Probity</h1>
       <p class="authors">
         <span>José Manuel Calderón Trilla</span>
@@ -170,57 +170,71 @@
   <!-- Part divider -->
   <section class="divider" data-state="st-accent">
     <div class="frame">
-      <div class="motif" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="splash" aria-hidden="true"><i></i><i></i></div>
       <h1 class="wordmark">Probity</h1>
       <p class="tagline">Formal Methods, honestly.</p>
     </div>
   </section>
 
-  <!-- The toolbox pyramid. One click stretches the bracket from "Lean" to everything. -->
+  <!-- From today's practice to verified code. Property-based testing is the
+       bridge from current practice to specifications, which rest on modeling,
+       embedding, and semantics. One click stretches the bracket from "Lean"
+       to everything. -->
   <section class="pathway">
     <div class="frame">
-      <header><h2>A pathway from today’s practice to formal methods</h2></header>
+      <header><h2>From Today’s Practice to Formally Verified Code</h2></header>
       <div class="pathway-body">
         <p class="lead">Help engineers <em class="hl">understand the toolbox</em>:</p>
-        <div class="pyramid">
-          <ol class="layers">
-            <li style="--w: 30%; --cut: 23.33%">Embedding</li>
-            <li style="--w: 44%; --cut: 15.91%">Modeling</li>
-            <li style="--w: 58%; --cut: 12.07%">Specifications</li>
-            <li style="--w: 72%; --cut: 9.72%">Semantics</li>
-            <li style="--w: 86%; --cut: 8.14%">Property-based testing</li>
-            <li style="--w: 100%; --cut: 7%" class="base">Current SWE practice</li>
-          </ol>
-          <div class="bracket">
-            <div class="bracket-line fragment extend" data-fragment-index="0"></div>
-            <p class="bracket-label fragment fade-out" data-fragment-index="0">Can all be<br>done in Lean</p>
-            <p class="bracket-label fragment fade-in" data-fragment-index="0">Soon it will<br>all be done in<br>formal languages</p>
+        <div class="crossing">
+          <div class="bank">Current SE Practice</div>
+          <div class="bridge">
+            <div class="deck">Property-Based Testing</div>
+            <svg class="arch" viewBox="0 0 412 120" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,120 Q206,-120 412,120"/>
+              <path d="M51.5,0 V67.5 M103,0 V30 M154.5,0 V7.5 M257.5,0 V7.5 M309,0 V30 M360.5,0 V67.5"/>
+            </svg>
+          </div>
+          <div class="built">
+            <div class="slab">Specifications</div>
+            <ul class="pillars">
+              <li>Modeling</li>
+              <li>Embedding</li>
+              <li>Semantics</li>
+            </ul>
+          </div>
+          <div class="reach">
+            <div class="reach-line fragment extend" data-fragment-index="0"></div>
+            <p class="reach-label fragment fade-out" data-fragment-index="0">Can all be done in Lean</p>
+            <p class="reach-label fragment fade-in" data-fragment-index="0">Soon it will all be done in formal languages</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Research tools: three tiles that fill in one per click. -->
+  <!-- Key activities: two sides that fill in one per click. -->
   <section class="tools">
     <div class="frame">
-      <header><h2>Research tools ready for SWE <em>and</em> agent use</h2></header>
+      <header><h2>Key Activities</h2></header>
       <ul class="bento">
         <li class="tile fragment fill ta">
           <h3>Scaffolding</h3>
-          <p>for common formal-methods tasks</p>
-        </li>
-        <li class="tile fragment fill tb">
-          <h3>User studies</h3>
+          <p>for common formal-methods tasks.</p>
+          <ul class="rows">
+            <li>Developer training</li>
+            <li>Usability studies for FM tools</li>
+            <li>Consulting for high-profile codebases</li>
+            <li>FM outreach</li>
+          </ul>
         </li>
         <li class="tile fragment fill tc">
           <h3>Maintaining</h3>
-          <p>formal-methods tools that are important, but not interesting to PhDs, e.g.:</p>
+          <p>critical formal methods infrastructure.</p>
           <ul class="rows">
             <li>Lean WASM backend</li>
             <li>KLEE on modern LLVM</li>
-            <li>Microsoft Code Contracts (RIP)</li>
-            <li>Contributing to QuickChick for Lean</li>
+            <li>Microsoft Code Contracts</li>
+            <li>PBT infrastructure in Lean</li>
           </ul>
         </li>
       </ul>
@@ -230,7 +244,7 @@
   <!-- Tech transfer: "Today" first, "With Probity" on the click. -->
   <section class="transfer-slide">
     <div class="frame">
-      <header><h2>Tech transfer, today and with Probity</h2></header>
+      <header><h2>Technology Transfer with Probity</h2></header>
       <div class="plot">
         <svg class="transfer" viewBox="0 0 1152 500" role="img" aria-label="Tech transfer today, and with Probity">
           <defs>
@@ -262,17 +276,14 @@
           <rect class="d-lane" x="0" y="0" width="1152" height="172" rx="20"/>
           <text class="d-row" x="32" y="44">Today</text>
           <use href="#i-lab" x="112" y="102"/>
-          <text class="d-label" x="112" y="158">Research lab</text>
+          <text class="d-label" x="112" y="158">Research Lab</text>
           <path class="d-flow" d="M158,102 H276" marker-end="url(#arrowhead)"/>
           <use href="#i-rough" x="330" y="102"/>
-          <text class="d-label" x="330" y="158">Research artifact</text>
+          <text class="d-label" x="330" y="158">Research Artifact</text>
           <path class="d-flow" d="M382,102 H998" marker-end="url(#arrowhead)"/>
           <use href="#i-face" x="1044" y="102"/>
           <path class="d-mouth" d="M1035,115 Q1044,107 1053,115"/>
-          <text class="d-label" x="1044" y="158">Industry engineer</text>
-          <polygon class="d-bubble" points="1004,52 1040,74 1030,46"/>
-          <rect class="d-bubble" x="772" y="14" width="284" height="46" rx="23"/>
-          <text class="d-say" x="914" y="43.5">Ouch! This sucks to use.</text>
+          <text class="d-label" x="1044" y="158">Industry Engineer</text>
 
           <!-- With Probity -->
           <rect class="d-lane-slot" x="1" y="189" width="1150" height="310" rx="20"/>
@@ -280,34 +291,31 @@
             <rect class="d-lane d-lane-ours" x="0" y="188" width="1152" height="312" rx="20"/>
             <text class="d-row d-row-ours" x="32" y="232">With Probity</text>
             <use href="#i-lab" x="112" y="322"/>
-            <text class="d-label" x="112" y="378">Research lab</text>
+            <text class="d-label" x="112" y="378">Research Lab</text>
             <path class="d-flow" d="M158,322 H276" marker-end="url(#arrowhead)"/>
             <use href="#i-rough" x="330" y="322"/>
-            <text class="d-label" x="330" y="378">Research artifact</text>
+            <text class="d-label" x="330" y="378">Research Artifact</text>
             <path class="d-flow" d="M382,322 H446" marker-end="url(#arrowhead)"/>
             <rect class="d-probity" x="456" y="278" width="184" height="88" rx="18"/>
             <text class="d-probity-label" x="548" y="332">Probity</text>
             <path class="d-flow" d="M650,322 H752" marker-end="url(#arrowhead)"/>
             <use href="#i-smooth" x="802" y="322"/>
-            <text class="d-label" x="802" y="378">Smoothed around the edges</text>
+            <text class="d-label" x="802" y="378">Smoothed Around the Edges</text>
             <path class="d-flow" d="M852,322 H998" marker-end="url(#arrowhead)"/>
             <use href="#i-face" x="1044" y="322"/>
             <path class="d-mouth" d="M1035,331 Q1044,340 1053,331"/>
-            <text class="d-label" x="1044" y="378">Industry engineer</text>
+            <text class="d-label" x="1044" y="378">Industry Engineer</text>
             <path class="d-flow" d="M548,376 V410" marker-end="url(#arrowhead)"/>
             <use href="#i-docs" x="548" y="450"/>
-            <text class="d-label d-label-start" x="592" y="456">Materials &amp; guidance</text>
+            <text class="d-label d-label-start" x="592" y="456">Materials &amp; Guidance</text>
             <path class="d-flow" d="M770,450 H1024 a20,20 0 0 0 20,-20 V398" marker-end="url(#arrowhead)"/>
-            <polygon class="d-bubble" points="1004,272 1040,294 1030,266"/>
-            <rect class="d-bubble" x="772" y="234" width="284" height="46" rx="23"/>
-            <text class="d-say" x="914" y="263.5">I’ve found so many bugs!</text>
           </g>
         </svg>
       </div>
     </div>
   </section>
 
-  <!-- Closing: the deck in three lines, in place of a "Thanks" slide. -->
+  <!-- Closing: three takeaways, in place of a "Thanks" slide. -->
   <section class="summary dark" data-state="st-dark">
     <div class="frame">
       <div class="brand">
@@ -315,9 +323,9 @@
         <p class="tagline">Formal Methods, honestly.</p>
       </div>
       <ul class="recap">
-        <li>Formal <s>Methods</s> <span class="hl">Slop</span> is Ascendant</li>
-        <li>A pathway from today’s practice to formal methods</li>
-        <li>Research tools ready for SWE <em>and</em> agent use</li>
+        <li>Formal methods is ascendant, but AI-written slop is rising faster.</li>
+        <li>Probity gives engineers a pathway from today’s practice to formal methods.</li>
+        <li>We scaffold common tasks and maintain critical infrastructure, so research reaches industry.</li>
       </ul>
       <p class="authors">
         <span>José Manuel Calderón Trilla</span>

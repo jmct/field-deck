@@ -118,32 +118,13 @@ html, body { background: var(--bg); }
 .divider { color: #fff; }
 .divider .tagline { margin-top: 26px; font-size: 44px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; }
 
-/* The pyramid, as a quiet mark on the title and divider slides. */
-.motif {
-  position: absolute;
-  right: 64px;
-  top: 64px;
-  width: 330px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-.motif i {
-  display: block;
-  height: 36px;
-  width: var(--w);
-  background: #1e1e21;
-  clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% 100%, 0 100%);
-}
-.motif i:nth-child(1) { --w: 30%; --cut: 23.33%; background: var(--accent); }
-.motif i:nth-child(2) { --w: 44%; --cut: 15.91%; }
-.motif i:nth-child(3) { --w: 58%; --cut: 12.07%; }
-.motif i:nth-child(4) { --w: 72%; --cut: 9.72%; }
-.motif i:nth-child(5) { --w: 86%; --cut: 8.14%; }
-.motif i:nth-child(6) { --w: 100%; --cut: 7%; }
-.divider .motif i { background: rgba(255, 255, 255, 0.14); }
-.divider .motif i:nth-child(1) { background: #fff; }
+/* Two flat circles in the corner of the title and divider slides. */
+.cover .frame, .divider .frame { overflow: hidden; }
+.splash i { position: absolute; border-radius: 50%; }
+.splash i:nth-child(1) { width: 560px; height: 560px; right: -150px; top: -200px; background: var(--accent); }
+.splash i:nth-child(2) { width: 250px; height: 250px; right: 300px; top: 160px; background: var(--series-1); mix-blend-mode: screen; }
+.divider .splash i:nth-child(1) { background: rgba(255, 255, 255, 0.15); }
+.divider .splash i:nth-child(2) { background: rgba(12, 12, 13, 0.22); mix-blend-mode: normal; }
 
 /* --- "Methods" struck out, "Slop" written in --------------------------- */
 
@@ -328,82 +309,79 @@ html, body { background: var(--bg); }
   mask-image: linear-gradient(#000 20%, transparent);
 }
 
-/* --- Pyramid ----------------------------------------------------------- */
+/* --- From today's practice to verified code ---------------------------- */
 
-.pathway-body { display: grid; grid-template-columns: 270px minmax(0, 1fr); column-gap: 28px; align-items: center; }
-.pathway .lead { align-self: start; padding-top: 14px; font-size: 38px; font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
-.pyramid { display: grid; grid-template-columns: 570px minmax(0, 1fr); column-gap: 26px; }
-.reveal .layers { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.layers li {
-  box-sizing: border-box;
-  width: var(--w);
-  height: 68px;
-  display: grid;
-  place-items: center;
-  clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% 100%, 0 100%);
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-}
-.layers li:nth-child(1) { background: var(--accent); color: #fff; align-items: end; padding-bottom: 14px; }
-.layers li:nth-child(2) { background: color-mix(in srgb, var(--accent) 72%, #fff); color: #fff; }
-.layers li:nth-child(3) { background: color-mix(in srgb, var(--accent) 46%, #fff); }
-.layers li:nth-child(4) { background: color-mix(in srgb, var(--accent) 28%, #fff); }
-.layers li:nth-child(5) { background: color-mix(in srgb, var(--accent) 14%, #fff); }
-.layers li.base { background: var(--ink); color: #fff; }
+.pathway-body { display: flex; flex-direction: column; justify-content: center; gap: 34px; }
+.pathway .lead { font-size: 34px; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; }
 
-/* Layers stack up from the base when the slide appears. */
-.layers li { opacity: 0; }
-.present .layers li { animation: rise 0.5s var(--ease) both; }
-.present .layers li:nth-child(6) { animation-delay: 0.1s; }
-.present .layers li:nth-child(5) { animation-delay: 0.18s; }
-.present .layers li:nth-child(4) { animation-delay: 0.26s; }
-.present .layers li:nth-child(3) { animation-delay: 0.34s; }
-.present .layers li:nth-child(2) { animation-delay: 0.42s; }
-.present .layers li:nth-child(1) { animation-delay: 0.5s; }
+/* Left bank: current practice. Right: specifications on three supports.
+   The bridge between them is property-based testing. */
+.crossing { display: grid; grid-template-columns: 300px minmax(0, 1fr) 440px; grid-template-rows: 260px auto; }
+.bank, .deck, .slab, .pillars li { display: grid; place-items: center; text-align: center; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+.bank { z-index: 1; padding: 0 28px; border-radius: 18px; background: var(--ink); color: #fff; font-size: 28px; }
+.bridge { position: relative; }
+/* The deck runs a little way under both sides so the joins are clean. */
+.deck { position: absolute; left: -24px; right: -24px; top: 0; height: 76px; background: color-mix(in srgb, var(--accent) 30%, #fff); font-size: 26px; }
+.arch { position: absolute; left: 0; top: 76px; width: 100%; height: 120px; }
+.arch path { fill: none; stroke: color-mix(in srgb, var(--accent) 42%, #fff); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.built { z-index: 1; display: grid; grid-template-rows: 112px minmax(0, 1fr); row-gap: 8px; }
+.slab { border-radius: 18px 18px 6px 6px; background: var(--accent); color: #fff; font-size: 30px; }
+.reveal .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px; }
+.pillars li { border-radius: 6px 6px 16px 16px; background: color-mix(in srgb, var(--accent) 14%, #fff); font-size: 21px; }
+
+/* The pieces arrive in order: the two sides, then the bridge joins them. */
+.bank, .slab, .pillars li, .deck, .arch { opacity: 0; }
+.present .bank { animation: rise 0.5s var(--ease) 0.1s both; }
+.present .pillars li { animation: rise 0.5s var(--ease) both; }
+.present .pillars li:nth-child(1) { animation-delay: 0.25s; }
+.present .pillars li:nth-child(2) { animation-delay: 0.33s; }
+.present .pillars li:nth-child(3) { animation-delay: 0.41s; }
+.present .slab { animation: rise 0.5s var(--ease) 0.55s both; }
+.present .deck { animation: span 0.6s cubic-bezier(0.6, 0, 0.2, 1) 0.9s both; }
+.present .arch { animation: appear 0.5s ease 1.3s both; }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes span { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
 
-/* The bracket covers every layer but the base, then grows to cover it too.
-   74px = one layer plus one gap. */
-.bracket { position: relative; }
+/* The bracket covers everything but current practice, then grows to cover
+   that too. 300px = the width of the left bank. */
+.reach { grid-column: 1 / -1; position: relative; height: 84px; margin-top: 20px; }
 .reveal .slides section .fragment.extend { opacity: 1; visibility: inherit; }
-.bracket-line {
+.reach-line {
   position: absolute;
-  left: 0;
+  right: 0;
   top: 0;
   box-sizing: border-box;
-  width: 16px;
-  height: calc(100% - 74px);
+  width: calc(100% - 300px);
+  height: 16px;
   border: 3px solid var(--ink);
-  border-left: 0;
-  border-radius: 0 8px 8px 0;
-  transition: height 0.55s cubic-bezier(0.6, 0, 0.2, 1);
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  transition: width 0.55s cubic-bezier(0.6, 0, 0.2, 1);
 }
-.bracket-line.visible { height: 100%; }
-.bracket-label {
+.reach-line.visible { width: 100%; }
+.reach-label {
   position: absolute;
-  left: 38px;
-  top: calc((100% - 74px) / 2);
-  transform: translateY(-50%);
+  top: 34px;
+  left: calc(300px + (100% - 300px) / 2);
+  transform: translateX(-50%);
   font-size: 29px;
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.035em;
   white-space: nowrap;
 }
-.bracket-label.fade-in { top: 50%; }
+.reach-label.fade-in { left: 50%; }
 
-/* --- Research tools: three tiles --------------------------------------- */
+/* --- Key activities: two sides ----------------------------------------- */
 
-.tools .bento { grid-template-columns: 5fr 7fr; grid-template-rows: 1fr 1fr; }
-.tools .tc { grid-column: 2; grid-row: 1 / 3; justify-content: flex-start; background-color: var(--ink); color: #fff; padding: 32px 34px 22px; }
-.tools .tile h3 { font-size: 50px; font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
-.tools .tile p { margin-top: 12px; font-size: 26px; color: var(--ink-2); }
-.tools .tc p { color: #b6b6bf; max-width: 17em; }
+.tools .bento { grid-template-columns: 1fr 1fr; }
+.tools .tile { justify-content: flex-start; padding: 34px 38px 24px; }
+.tools .tc { background-color: var(--ink); color: #fff; }
+.tools .tile h3 { font-size: 54px; font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
+.tools .tile p { margin-top: 14px; font-size: 26px; color: var(--ink-2); }
+.tools .tc p { color: #b6b6bf; }
 .tools .rows { margin-top: auto; }
-.tools .rows li { padding: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.16); font-size: 23px; font-weight: 500; letter-spacing: -0.02em; }
-.tools h3 em { font-style: normal; }
+.tools .rows li { padding: 15px 0; border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent); font-size: 23px; font-weight: 500; letter-spacing: -0.02em; }
 
 /* --- Tech-transfer diagram --------------------------------------------- */
 
@@ -424,8 +402,6 @@ html, body { background: var(--bg); }
 .d-smooth { fill: var(--accent); }
 .d-flow { fill: none; stroke: var(--ink); stroke-width: 2; }
 .d-arrowhead { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.d-bubble { fill: #fff; }
-.d-say { font-family: var(--font); font-size: 18px; font-weight: 500; letter-spacing: -0.01em; fill: var(--ink); text-anchor: middle; }
 .d-label { font-family: var(--font); font-size: 16px; font-weight: 500; fill: var(--ink-2); text-anchor: middle; }
 .d-label-start { text-anchor: start; }
 .d-probity { fill: var(--accent); }
@@ -445,14 +421,12 @@ html, body { background: var(--bg); }
 .summary .tagline { margin-top: 18px; font-size: 30px; font-weight: 500; letter-spacing: -0.03em; color: var(--accent-on-dark); }
 .recap li { padding: 26px 0; border-top: 1px solid #2b2b30; font-size: 34px; font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; text-wrap: balance; }
 .recap li:last-child { border-bottom: 1px solid #2b2b30; }
-.recap s { color: #6f6f79; text-decoration: line-through; text-decoration-color: var(--accent-on-dark); text-decoration-thickness: 3px; }
-.recap .hl { color: var(--accent-on-dark); }
 .summary .authors { grid-column: 1 / -1; margin-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .present .c-draw, .present .c-late, .present .layers li { animation-duration: 0.01s; animation-delay: 0s; }
+  .present .c-draw, .present .c-late, .present :is(.bank, .slab, .pillars li, .deck, .arch) { animation-duration: 0.01s; animation-delay: 0s; }
 }
 @media print {
   .c-draw { stroke-dashoffset: 0; }
-  .c-late, .layers li { opacity: 1; }
+  .c-late, .bank, .slab, .pillars li, .deck, .arch { opacity: 1; }
 }
