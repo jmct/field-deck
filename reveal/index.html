@@ -1,0 +1,327 @@
+<!doctype html>
+<!--
+  Probity: the Reveal.js version of talk.tex, laid out as a pitch deck.
+
+  Open this file in a browser (no build step, works offline).
+  css/deck.css   layout, type, and color
+  js/deck.js     draws the two charts (data copied from plots/data/*.csv)
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Probity</title>
+  <link rel="stylesheet" href="vendor/reveal/reset.css">
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/deck.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- Title -->
+  <section class="cover dark" data-state="st-dark">
+    <div class="frame">
+      <div class="motif" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h1 class="wordmark">Probity</h1>
+      <p class="authors">
+        <span>José Manuel Calderón Trilla</span>
+        <span>Harrison Goldstein</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- One click: "Methods" is struck out and "Slop" takes its place. -->
+  <section class="statement">
+    <div class="frame">
+      <h1>
+        Formal <span class="swap fragment"><span class="old">Methods</span> <span class="new">Slop</span></span><br>
+        is Ascendant
+      </h1>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section class="chart">
+    <div class="frame">
+      <header><h2>Lean: 9 years to 2.4M lines, then 13.5M in 11 days</h2></header>
+      <div class="chart-body">
+        <figure>
+          <p class="chart-sub">Lean lines per project; dashed lines: well-known open-source codebases, for scale</p>
+          <div class="plot" id="chart-leanloc"></div>
+        </figure>
+        <div class="rail">
+          <p class="stat"><span class="key key-1"></span><b>2.4M</b> lines in 9 years</p>
+          <p class="stat"><span class="key key-2"></span><b>13.5M</b> lines in 11 days</p>
+        </div>
+      </div>
+      <aside class="notes-row">
+        <p>Total lines of <code>*.lean</code> (or all source, for reference projects), incl. comments, counted with scc on each public repo, Nov 2026.</p>
+        <p>mathlib = larger of mathlib3/mathlib4 at quarterly snapshots. Fermat’s Last Theorem alone is 5.7× all of mathlib (2.36M lines, Aug 2026).</p>
+        <p>Dashed magenta: quadratic least-squares fit of log(lines) vs. date over the 7 machine-generated points (<i>R</i><sup>2</sup> = 0.80), implying growth of ≈100× per year (size doubling every ≈2 months).</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="chart">
+    <div class="frame">
+      <header><h2>Interest in Lean and software verification is climbing</h2></header>
+      <div class="chart-body">
+        <figure>
+          <p class="chart-sub">Monthly search interest, Nov 2024 – Sep 2026</p>
+          <div class="plot" id="chart-trends"></div>
+        </figure>
+        <div class="rail">
+          <p class="legend"><span class="key key-2"></span>“software verification”</p>
+          <p class="legend"><span class="key key-1"></span>“Lean programming language”</p>
+        </div>
+      </div>
+      <aside class="notes-row">
+        <p>Dots: monthly values. Lines: robust LOWESS smoothing (local linear fit over the nearest 9 months, outliers down-weighted).</p>
+        <p>Each series is normalized to its own peak (= 100), so the two lines show the shape of each trend, not their relative volume.</p>
+        <p>Source: plots/data/lean-trends.csv and software-verification-trends.csv.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Slop: five tiles that fill in one per click. -->
+  <section class="slop">
+    <div class="frame">
+      <header><h2>Common forms of formal methods slop</h2></header>
+      <ul class="bento">
+        <li class="tile fragment fill t1">
+          <p>Agents change your properties in order to meet the code</p>
+        </li>
+        <li class="tile fragment fill t2">
+          <p>Agents prove that your code meets the specification defined <em class="hl">by your code</em>, which is vacuously true</p>
+        </li>
+        <li class="tile fragment fill t3">
+          <p>The property or theorem as stated is subtly (but importantly) different from what you asked for: an <span class="hl">interpretability problem</span> for specifications</p>
+        </li>
+        <li class="tile fragment fill t4">
+          <p>Little to no thought given to the link between <span class="hl">the model</span> and <span class="hl">the actual implementation</span></p>
+        </li>
+        <li class="tile fragment fill t5">
+          <p>Bad PBT generators</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- The slide title is the prompt, so it is drawn as one. -->
+  <section class="demo">
+    <div class="frame">
+      <div class="demo-text">
+        <div class="prompt-box">
+          <h2>Claude, make me a verified Minecraft in Lean</h2>
+          <span class="send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span>
+        </div>
+        <p class="takeaway">Works, sure, but Lean was happy to use a C-library without thinking about how that library should behave!</p>
+      </div>
+      <div class="shot"><img src="assets/fox.png" alt="Screenshot of a Minecraft-like block world with a fox, rendered by the Lean program"></div>
+    </div>
+  </section>
+
+  <!-- Why us: José's details on the first click, Harry's on the second. -->
+  <section class="team">
+    <div class="frame">
+      <header><h2>Why us?</h2></header>
+      <div class="people">
+        <article class="person">
+          <h3><span class="avatar" aria-hidden="true">J</span>José</h3>
+          <div class="cv fragment">
+            <ul class="orgs">
+              <li><b>Galois</b>Formal Methods</li>
+              <li><b>University of Maryland</b>Faculty</li>
+            </ul>
+            <ul class="lines">
+              <li>Non-profit experience as Exec. Dir. of the Haskell Foundation</li>
+              <li>Formal Methods consultant helping Co.s leverage these tools</li>
+            </ul>
+          </div>
+        </article>
+        <article class="person">
+          <h3><span class="avatar" aria-hidden="true">H</span>Harry</h3>
+          <div class="cv fragment">
+            <ul class="orgs">
+              <li><b>Cornell</b>Studied engineering leadership</li>
+              <li><b>UPenn</b>PLT and Property-based testing</li>
+            </ul>
+            <ul class="lines">
+              <li>User studies on developers using semi-formal methods</li>
+              <li>Current research on interpretability of specifications</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Part divider -->
+  <section class="divider" data-state="st-accent">
+    <div class="frame">
+      <div class="motif" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h1 class="wordmark">Probity</h1>
+      <p class="tagline">Formal Methods, honestly.</p>
+    </div>
+  </section>
+
+  <!-- The toolbox pyramid. One click stretches the bracket from "Lean" to everything. -->
+  <section class="pathway">
+    <div class="frame">
+      <header><h2>A pathway from today’s practice to formal methods</h2></header>
+      <div class="pathway-body">
+        <p class="lead">Help engineers <em class="hl">understand the toolbox</em>:</p>
+        <div class="pyramid">
+          <ol class="layers">
+            <li style="--w: 30%; --cut: 23.33%">Embedding</li>
+            <li style="--w: 44%; --cut: 15.91%">Modeling</li>
+            <li style="--w: 58%; --cut: 12.07%">Specifications</li>
+            <li style="--w: 72%; --cut: 9.72%">Semantics</li>
+            <li style="--w: 86%; --cut: 8.14%">Property-based testing</li>
+            <li style="--w: 100%; --cut: 7%" class="base">Current SWE practice</li>
+          </ol>
+          <div class="bracket">
+            <div class="bracket-line fragment extend" data-fragment-index="0"></div>
+            <p class="bracket-label fragment fade-out" data-fragment-index="0">Can all be<br>done in Lean</p>
+            <p class="bracket-label fragment fade-in" data-fragment-index="0">Soon it will<br>all be done in<br>formal languages</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research tools: three tiles that fill in one per click. -->
+  <section class="tools">
+    <div class="frame">
+      <header><h2>Research tools ready for SWE <em>and</em> agent use</h2></header>
+      <ul class="bento">
+        <li class="tile fragment fill ta">
+          <h3>Scaffolding</h3>
+          <p>for common formal-methods tasks</p>
+        </li>
+        <li class="tile fragment fill tb">
+          <h3>User studies</h3>
+        </li>
+        <li class="tile fragment fill tc">
+          <h3>Maintaining</h3>
+          <p>formal-methods tools that are important, but not interesting to PhDs, e.g.:</p>
+          <ul class="rows">
+            <li>Lean WASM backend</li>
+            <li>KLEE on modern LLVM</li>
+            <li>Microsoft Code Contracts (RIP)</li>
+            <li>Contributing to QuickChick for Lean</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Tech transfer: "Today" first, "With Probity" on the click. -->
+  <section class="transfer-slide">
+    <div class="frame">
+      <header><h2>Tech transfer, today and with Probity</h2></header>
+      <div class="plot">
+        <svg class="transfer" viewBox="0 0 1152 500" role="img" aria-label="Tech transfer today, and with Probity">
+          <defs>
+            <marker id="arrowhead" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path class="d-arrowhead" d="M2,2 L10,6 L2,10"/>
+            </marker>
+            <g id="i-lab">
+              <rect class="d-node" x="-34" y="-34" width="68" height="68" rx="18"/>
+              <path class="d-liquid" d="M-10.5,6 L-16,16.5 Q-17.5,20 -14,20 H14 Q17.5,20 16,16.5 L10.5,6 Z"/>
+              <path class="d-line" d="M-6,-19 V-6 L-16,16.5 Q-17.5,20 -14,20 H14 Q17.5,20 16,16.5 L6,-6 V-19 M-9.5,-19 H9.5"/>
+            </g>
+            <g id="i-rough">
+              <polygon class="d-rough" transform="scale(0.72)" points="0,-46 5.9,-20.1 24.9,-38.7 15.9,-13.8 41.8,-19.1 20.8,-3 45.5,6.5 19.1,8.7 34.8,30.1 11.4,17.7 13,44.1 0,21 -13,44.1 -11.4,17.7 -34.8,30.1 -19.1,8.7 -45.5,6.5 -20.8,-3 -41.8,-19.1 -15.9,-13.8 -24.9,-38.7 -5.9,-20.1"/>
+            </g>
+            <g id="i-smooth">
+              <path class="d-smooth" fill-rule="evenodd" transform="scale(0.74) rotate(8)" d="M31.9,2.8L45.4,7.2L42.3,18L28.5,14.5A32,32 0 0 1 24.2,21L32.5,32.5L23.7,39.4L14.5,28.5A32,32 0 0 1 7.2,31.2L7.2,45.4L-4,45.8L-5,31.6A32,32 0 0 1 -12.5,29.5L-20.9,41L-30.2,34.7L-22.6,22.6A32,32 0 0 1 -27.4,16.5L-41,20.9L-44.8,10.3L-31.6,5A32,32 0 0 1 -31.9,-2.8L-45.4,-7.2L-42.3,-18L-28.5,-14.5A32,32 0 0 1 -24.2,-21L-32.5,-32.5L-23.7,-39.4L-14.5,-28.5A32,32 0 0 1 -7.2,-31.2L-7.2,-45.4L4,-45.8L5,-31.6A32,32 0 0 1 12.5,-29.5L20.9,-41L30.2,-34.7L22.6,-22.6A32,32 0 0 1 27.4,-16.5L41,-20.9L44.8,-10.3L31.6,-5A32,32 0 0 1 31.9,2.8Z M13,0 A13,13 0 1 0 -13,0 A13,13 0 1 0 13,0Z"/>
+            </g>
+            <g id="i-docs">
+              <rect class="d-node" x="-30" y="-30" width="60" height="60" rx="16"/>
+              <path class="d-line" d="M-9,-15 H4 L11,-8 V15 H-9 Z M4,-15 V-8 H11 M-4,-1 H6 M-4,6 H6"/>
+            </g>
+            <g id="i-face">
+              <circle class="d-node d-face" r="26"/>
+              <circle class="d-eye" cx="-8.5" cy="-5" r="2.8"/><circle class="d-eye" cx="8.5" cy="-5" r="2.8"/>
+            </g>
+          </defs>
+
+          <!-- Today -->
+          <rect class="d-lane" x="0" y="0" width="1152" height="172" rx="20"/>
+          <text class="d-row" x="32" y="44">Today</text>
+          <use href="#i-lab" x="112" y="102"/>
+          <text class="d-label" x="112" y="158">Research lab</text>
+          <path class="d-flow" d="M158,102 H276" marker-end="url(#arrowhead)"/>
+          <use href="#i-rough" x="330" y="102"/>
+          <text class="d-label" x="330" y="158">Research artifact</text>
+          <path class="d-flow" d="M382,102 H998" marker-end="url(#arrowhead)"/>
+          <use href="#i-face" x="1044" y="102"/>
+          <path class="d-mouth" d="M1035,115 Q1044,107 1053,115"/>
+          <text class="d-label" x="1044" y="158">Industry engineer</text>
+          <polygon class="d-bubble" points="1004,52 1040,74 1030,46"/>
+          <rect class="d-bubble" x="772" y="14" width="284" height="46" rx="23"/>
+          <text class="d-say" x="914" y="43.5">Ouch! This sucks to use.</text>
+
+          <!-- With Probity -->
+          <rect class="d-lane-slot" x="1" y="189" width="1150" height="310" rx="20"/>
+          <g class="fragment">
+            <rect class="d-lane d-lane-ours" x="0" y="188" width="1152" height="312" rx="20"/>
+            <text class="d-row d-row-ours" x="32" y="232">With Probity</text>
+            <use href="#i-lab" x="112" y="322"/>
+            <text class="d-label" x="112" y="378">Research lab</text>
+            <path class="d-flow" d="M158,322 H276" marker-end="url(#arrowhead)"/>
+            <use href="#i-rough" x="330" y="322"/>
+            <text class="d-label" x="330" y="378">Research artifact</text>
+            <path class="d-flow" d="M382,322 H446" marker-end="url(#arrowhead)"/>
+            <rect class="d-probity" x="456" y="278" width="184" height="88" rx="18"/>
+            <text class="d-probity-label" x="548" y="332">Probity</text>
+            <path class="d-flow" d="M650,322 H752" marker-end="url(#arrowhead)"/>
+            <use href="#i-smooth" x="802" y="322"/>
+            <text class="d-label" x="802" y="378">Smoothed around the edges</text>
+            <path class="d-flow" d="M852,322 H998" marker-end="url(#arrowhead)"/>
+            <use href="#i-face" x="1044" y="322"/>
+            <path class="d-mouth" d="M1035,331 Q1044,340 1053,331"/>
+            <text class="d-label" x="1044" y="378">Industry engineer</text>
+            <path class="d-flow" d="M548,376 V410" marker-end="url(#arrowhead)"/>
+            <use href="#i-docs" x="548" y="450"/>
+            <text class="d-label d-label-start" x="592" y="456">Materials &amp; guidance</text>
+            <path class="d-flow" d="M770,450 H1024 a20,20 0 0 0 20,-20 V398" marker-end="url(#arrowhead)"/>
+            <polygon class="d-bubble" points="1004,272 1040,294 1030,266"/>
+            <rect class="d-bubble" x="772" y="234" width="284" height="46" rx="23"/>
+            <text class="d-say" x="914" y="263.5">I’ve found so many bugs!</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing: the deck in three lines, in place of a "Thanks" slide. -->
+  <section class="summary dark" data-state="st-dark">
+    <div class="frame">
+      <div class="brand">
+        <h1 class="wordmark">Probity</h1>
+        <p class="tagline">Formal Methods, honestly.</p>
+      </div>
+      <ul class="recap">
+        <li>Formal <s>Methods</s> <span class="hl">Slop</span> is Ascendant</li>
+        <li>A pathway from today’s practice to formal methods</li>
+        <li>Research tools ready for SWE <em>and</em> agent use</li>
+      </ul>
+      <p class="authors">
+        <span>José Manuel Calderón Trilla</span>
+        <span>Harrison Goldstein</span>
+      </p>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/plugin/notes.js"></script>
+<script src="js/deck.js"></script>
+</body>
+</html>
