@@ -32,44 +32,15 @@
     </div>
   </section>
 
-  <!-- One click: "Methods" is struck out and "Slop" takes its place. -->
-  <section class="statement">
-    <div class="frame">
-      <h1>
-        Formal <span class="swap fragment"><span class="old">Methods</span> <span class="new">Slop</span></span><br>
-        is Ascendant
-      </h1>
-    </div>
-  </section>
-
-  <!-- Charts -->
+  <!-- The two charts tell the opening story. First: interest is climbing. -->
   <section class="chart">
     <div class="frame">
-      <header><h2>Lean: 9 years to 2.4M lines, then 13.5M in 11 days</h2></header>
+      <header>
+        <h2>Formal Methods is Ascendant</h2>
+      </header>
       <div class="chart-body">
         <figure>
-          <p class="chart-sub">Lean lines per project; dashed lines: well-known open-source codebases, for scale</p>
-          <div class="plot" id="chart-leanloc"></div>
-        </figure>
-        <div class="rail">
-          <p class="stat"><span class="key key-1"></span><b>2.4M</b> lines in 9 years</p>
-          <p class="stat"><span class="key key-2"></span><b>13.5M</b> lines in 11 days</p>
-        </div>
-      </div>
-      <aside class="notes-row">
-        <p>Total lines of <code>*.lean</code> (or all source, for reference projects), incl. comments, counted with scc on each public repo, Nov 2026.</p>
-        <p>mathlib = larger of mathlib3/mathlib4 at quarterly snapshots. Fermat’s Last Theorem alone is 5.7× all of mathlib (2.36M lines, Aug 2026).</p>
-        <p>Dashed magenta: quadratic least-squares fit of log(lines) vs. date over the 7 machine-generated points (<i>R</i><sup>2</sup> = 0.80), implying growth of ≈100× per year (size doubling every ≈2 months).</p>
-      </aside>
-    </div>
-  </section>
-
-  <section class="chart">
-    <div class="frame">
-      <header><h2>Interest in Lean and software verification is climbing</h2></header>
-      <div class="chart-body">
-        <figure>
-          <p class="chart-sub">Monthly search interest, Nov 2024 – Sep 2026</p>
+          <p class="chart-sub">Smoothed monthly search interest, Nov 2024 – Sep 2026</p>
           <div class="plot" id="chart-trends"></div>
         </figure>
         <div class="rail">
@@ -77,49 +48,69 @@
           <p class="legend"><span class="key key-1"></span>“Lean programming language”</p>
         </div>
       </div>
-      <aside class="notes-row">
-        <p>Dots: monthly values. Lines: robust LOWESS smoothing (local linear fit over the nearest 9 months, outliers down-weighted).</p>
-        <p>Each series is normalized to its own peak (= 100), so the two lines show the shape of each trend, not their relative volume.</p>
-        <p>Source: plots/data/lean-trends.csv and software-verification-trends.csv.</p>
-      </aside>
     </div>
   </section>
 
-  <!-- Slop: five tiles that fill in one per click. -->
+  <!-- Then: the same title over Mathlib's nine-year climb. One click zooms the
+       chart out to show the AI-written total, and "Methods" becomes "Slop". -->
+  <section class="chart">
+    <div class="frame">
+      <header>
+        <h2>Formal <span class="swap fragment" data-fragment-index="0"><span class="old">Methods</span><span class="new">Slop</span></span> is Ascendant</h2>
+      </header>
+      <div class="chart-body">
+        <figure>
+          <p class="chart-sub">Total lines of Lean, 2017–2026</p>
+          <div class="plot" id="chart-leanloc"></div>
+        </figure>
+        <div class="rail">
+          <p class="stat"><span class="key key-1"></span><b>2.5M</b> human-written lines in Mathlib, after 9 years</p>
+          <p class="stat fragment" data-fragment-index="0"><span class="key key-2"></span><b>24.8M</b> AI-written lines, in 14 months</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slop: four tiles that fill in one per click. -->
   <section class="slop">
     <div class="frame">
-      <header><h2>Common forms of formal methods slop</h2></header>
+      <header><h2>Examples of Formal Slop</h2></header>
       <ul class="bento">
         <li class="tile fragment fill t1">
-          <p>Agents change your properties in order to meet the code</p>
+          <p>The formal model is <span class="hl">not checked</span> against the real implementation.</p>
         </li>
         <li class="tile fragment fill t2">
-          <p>Agents prove that your code meets the specification defined <em class="hl">by your code</em>, which is vacuously true</p>
+          <p>The agent <span class="hl">changed your correctness theorems</span> to be easier to prove.</p>
         </li>
         <li class="tile fragment fill t3">
-          <p>The property or theorem as stated is subtly (but importantly) different from what you asked for: an <span class="hl">interpretability problem</span> for specifications</p>
+          <p>The correctness theorem <span class="hl">doesn’t actually abstract</span> the system under test.</p>
         </li>
         <li class="tile fragment fill t4">
-          <p>Little to no thought given to the link between <span class="hl">the model</span> and <span class="hl">the actual implementation</span></p>
-        </li>
-        <li class="tile fragment fill t5">
-          <p>Bad PBT generators</p>
+          <p>The model <span class="hl">inherits the same bugs</span> that were implemented into the code.</p>
         </li>
       </ul>
     </div>
   </section>
 
-  <!-- The slide title is the prompt, so it is drawn as one. -->
+  <!-- The slide title is the prompt, so it is drawn as one, above its result. -->
   <section class="demo">
     <div class="frame">
-      <div class="demo-text">
-        <div class="prompt-box">
-          <h2>Claude, make me a verified Minecraft in Lean</h2>
-          <span class="send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span>
-        </div>
-        <p class="takeaway">Works, sure, but Lean was happy to use a C-library without thinking about how that library should behave!</p>
+      <div class="prompt-box">
+        <h2>Claude, make me a verified Minecraft in Lean</h2>
+        <span class="send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span>
       </div>
       <div class="shot"><img src="assets/fox.png" alt="Screenshot of a Minecraft-like block world with a fox, rendered by the Lean program"></div>
+      <ul class="verdict">
+        <li class="tile">
+          <h3>On the surface</h3>
+          <p>Looks great!</p>
+          <p>6,600 lines of Lean proofs.</p>
+        </li>
+        <li class="tile inverse">
+          <h3>Under the hood</h3>
+          <p>Rendering implemented in&nbsp;C, with no bridge to the theorems.</p>
+        </li>
+      </ul>
     </div>
   </section>
 

@@ -145,10 +145,10 @@ html, body { background: var(--bg); }
 .divider .motif i { background: rgba(255, 255, 255, 0.14); }
 .divider .motif i:nth-child(1) { background: #fff; }
 
-/* --- "Formal Methods is Ascendant" ------------------------------------- */
+/* --- "Methods" struck out, "Slop" written in --------------------------- */
 
-.statement .frame { display: flex; flex-direction: column; justify-content: center; }
-.statement h1 { font-size: 106px; font-weight: 600; line-height: 1.03; letter-spacing: -0.05em; }
+/* Used in the Lean chart's title. "Slop" takes no room until the click,
+   then opens up beside the struck word. */
 .reveal .slides section .fragment.swap { opacity: 1; visibility: inherit; }
 .swap .old { position: relative; transition: color 0.4s ease; }
 .swap .old::after {
@@ -165,18 +165,21 @@ html, body { background: var(--bg); }
 }
 .swap .new {
   display: inline-block;
+  overflow-x: clip;
+  white-space: nowrap;
+  max-width: 0;
+  margin-left: 0;
   color: var(--accent);
   opacity: 0;
-  transform: translateX(-14px);
-  transition: opacity 0.3s ease 0.3s, transform 0.5s var(--ease) 0.3s;
+  transition: max-width 0.5s var(--ease) 0.2s, margin-left 0.5s var(--ease) 0.2s, opacity 0.3s ease 0.35s;
 }
 .swap.visible .old { color: var(--ink-3); }
 .swap.visible .old::after { transform: scaleX(1); }
-.swap.visible .new { opacity: 1; transform: none; }
+.swap.visible .new { max-width: 2.6em; margin-left: 0.24em; opacity: 1; }
 
 /* --- Charts ------------------------------------------------------------ */
 
-.chart .frame { grid-template-rows: auto minmax(0, 1fr) auto; row-gap: 18px; }
+.chart .frame { row-gap: 20px; }
 .chart-body { display: grid; grid-template-columns: minmax(0, 1fr) 276px; column-gap: 40px; min-height: 0; }
 .chart figure { display: flex; flex-direction: column; min-height: 0; }
 .chart-sub { font-size: 16px; color: var(--ink-2); margin-bottom: 8px; }
@@ -194,23 +197,10 @@ html, body { background: var(--bg); }
 .key { display: block; width: 30px; height: 5px; border-radius: 3px; flex: none; }
 .key-1 { background: var(--series-1); }
 .key-2 { background: var(--series-2); }
-.stat { font-size: 19px; color: var(--ink-2); }
+.stat { font-size: 19px; color: var(--ink-2); text-wrap: balance; }
 .stat .key { margin-bottom: 14px; }
 .stat b { display: block; font-size: 70px; line-height: 1; letter-spacing: -0.05em; color: var(--ink); margin-bottom: 6px; }
 .legend { display: flex; align-items: center; gap: 14px; font-size: 20px; font-weight: 500; letter-spacing: -0.015em; }
-
-.notes-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: 36px;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
-  font-size: 12px;
-  line-height: 1.45;
-  color: #73737c;
-}
-.notes-row code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.94em; }
-.notes-row sup { font-size: 0.7em; vertical-align: super; line-height: 0; }
 
 .c-axis { fill: none; stroke: #b9b9c0; stroke-width: 1; }
 .c-grid { stroke: #ececef; stroke-width: 1; }
@@ -219,63 +209,59 @@ html, body { background: var(--bg); }
 .c-axis-title { font-size: 13px; fill: var(--ink-2); }
 .c-label { font-size: 13.5px; font-weight: 500; fill: var(--ink-2); }
 .c-label.c-strong { fill: var(--ink); font-weight: 600; }
-.c-label.c-minor { font-size: 11.5px; font-weight: 400; }
 .c-halo { paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
-.c-ref { stroke: #a6a6af; stroke-width: 1.2; stroke-dasharray: 6 5; }
 .c-line { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
-.c-fit { fill: none; stroke-width: 1.8; stroke-dasharray: 7 6; opacity: 0.75; }
-.c-link { stroke-width: 1.8; }
 .c-s1 { stroke: var(--series-1); }
 .c-s2 { stroke: var(--series-2); }
 .c-dot { stroke: var(--bg); stroke-width: 2; }
-.c-dot.c-s2, .c-raw.c-s2 { fill: var(--series-2); }
-.c-dot.c-s1, .c-raw.c-s1 { fill: var(--series-1); }
-.c-raw { stroke: none; opacity: 0.45; }
+.c-dot.c-s2 { fill: var(--series-2); }
 
 /* Lines draw themselves when the slide appears; the rest follows. */
 .c-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .present .c-draw { animation: draw 1.3s cubic-bezier(0.5, 0, 0.2, 1) 0.2s both; }
-.c-early, .c-after, .c-late { opacity: 0; }
-.present .c-early { animation: appear 0.6s ease 0.1s both; }
+.c-late { opacity: 0; }
 .present .c-late { animation: appear 0.5s ease 1.1s both; }
-.present .c-after { animation: appear 0.6s ease 1.4s both; }
+/* The zoom-out on the Lean chart is stepped by deck.js, not by Reveal's fade. */
+.reveal .slides section .fragment.zoom { opacity: 1; visibility: inherit; transition: none; }
 @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
 
-/* --- Slop: five tiles -------------------------------------------------- */
+/* --- Slop: four tiles -------------------------------------------------- */
 
 .reveal .bento { display: grid; gap: 14px; min-height: 0; }
 .slop .bento { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: 1fr 1fr; }
-.slop .t1 { grid-column: 1 / 6; }
-.slop .t2 { grid-column: 6 / 13; }
+.slop .t1 { grid-column: 1 / 8; }
+.slop .t2 { grid-column: 8 / 13; }
 .slop .t3 { grid-column: 1 / 6; }
-.slop .t4 { grid-column: 6 / 10; }
-.slop .t5 { grid-column: 10 / 13; }
-.slop .t1 p { font-size: 42px; }
-.slop .t2 p { font-size: 38px; }
-.slop .t3 p { font-size: 27px; }
-.slop .t4 p { font-size: 29px; }
-.slop .t5 p { font-size: 47px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+.slop .t4 { grid-column: 6 / 13; }
+.slop .tile { padding: 32px 34px; }
+.slop .tile p { font-size: 36px; line-height: 1.14; letter-spacing: -0.028em; text-wrap: balance; }
 .slop .t2 { background-color: var(--ink); color: #fff; }
 .slop .t2 .hl { color: var(--accent-on-dark); }
-.slop .t5 { background-color: var(--accent); color: #fff; }
+.slop .t3 { background-color: var(--accent-soft); }
 
 /* --- Screenshot slide -------------------------------------------------- */
 
-.demo .frame { grid-template-rows: minmax(0, 1fr); grid-template-columns: 420px minmax(0, 1fr); column-gap: 52px; align-items: center; }
-.demo-text { display: flex; flex-direction: column; gap: 40px; }
-.prompt-box {
-  display: flex;
-  flex-direction: column;
-  padding: 26px 22px 20px 28px;
-  border: 1.5px solid var(--line);
-  border-radius: 26px;
-  box-shadow: 0 1px 2px rgba(12, 12, 13, 0.05), 0 18px 40px -18px rgba(12, 12, 13, 0.2);
+/* One block: the prompt above its screenshot on the left, the two verdict
+   cards filling the same height on the right. */
+.demo .frame {
+  grid-template-columns: minmax(0, 1fr) 356px;
+  grid-template-rows: auto auto;
+  gap: 14px;
+  align-content: center;
 }
-.prompt-box h2 { font-size: 35px; font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; }
+.prompt-box {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 16px 16px 28px;
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+}
+.prompt-box h2 { flex: 1; font-size: 30px; font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; white-space: nowrap; }
 .send {
-  align-self: flex-end;
-  margin-top: 22px;
+  flex: none;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -284,18 +270,14 @@ html, body { background: var(--bg); }
   place-items: center;
 }
 .send svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.takeaway { font-size: 27px; font-weight: 500; line-height: 1.22; letter-spacing: -0.022em; text-wrap: pretty; }
-.demo .shot { line-height: 0; }
-.demo .shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 0;
-  max-width: none;
-  max-height: none;
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(12, 12, 13, 0.08), 0 28px 60px -24px rgba(12, 12, 13, 0.35);
-}
+.demo .shot { grid-column: 1; line-height: 0; }
+.demo .shot img { display: block; width: 100%; height: auto; margin: 0; max-width: none; max-height: none; border-radius: 18px; }
+.reveal .verdict { grid-column: 2; grid-row: 1 / 3; display: grid; grid-template-rows: 1fr 1fr; gap: 14px; }
+.verdict .tile { justify-content: flex-start; padding: 26px 30px 28px; }
+.verdict h3 { margin-bottom: auto; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink-2); }
+.verdict .inverse h3 { color: #b6b6bf; }
+.verdict p { font-size: 32px; line-height: 1.12; letter-spacing: -0.028em; text-wrap: balance; }
+.verdict p + p { margin-top: 12px; }
 
 /* --- Why us ------------------------------------------------------------ */
 
@@ -447,9 +429,9 @@ html, body { background: var(--bg); }
 .summary .authors { grid-column: 1 / -1; margin-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .present .c-draw, .present .c-early, .present .c-late, .present .c-after, .present .layers li { animation-duration: 0.01s; animation-delay: 0s; }
+  .present .c-draw, .present .c-late, .present .layers li { animation-duration: 0.01s; animation-delay: 0s; }
 }
 @media print {
   .c-draw { stroke-dashoffset: 0; }
-  .c-early, .c-after, .c-late, .layers li { opacity: 1; }
+  .c-late, .layers li { opacity: 1; }
 }

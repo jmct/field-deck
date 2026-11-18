@@ -14,8 +14,8 @@ function svg(name, attrs = {}, parent = null, text = null) {
 const r1 = (n) => Math.round(n * 10) / 10;
 
 /* ------------------------------------------------------------------ */
-/* Chart 1: largest Lean project over time                             */
-/* Data: plots/data/lean_mathlib.csv, lean_ai.csv, oss_reference.csv   */
+/* Chart 1: human-written vs. AI-written Lean over time                */
+/* Data: plots/data/lean_mathlib.csv, lean_ai.csv                      */
 /* ------------------------------------------------------------------ */
 
 // [year, total lines]: max(mathlib3, mathlib4) at quarterly snapshots
@@ -32,103 +32,132 @@ const MATHLIB = [
   [2026.88, 2464552],
 ];
 
-// AI-driven formalizations. `label` is omitted for the earlier Qin et al. release,
-// which is drawn as the start of a short connector instead.
+// AI-driven formalizations, by completion date: lines each one added to the
+// running total. Qin et al. appears twice because the same repo grew between
+// two releases (4.72M, then 7.39M).
 const AI = [
-  { x: 2025.69, y: 28407, label: 'Strong PNT (Math Inc): 28k' },
-  { x: 2026.17, y: 180661, label: 'Sphere packing (Math Inc): 0.18M' },
-  { x: 2026.63, y: 13499380, label: 'Fermat’s Last Theorem (Claude, Aug 2026): 13.5M', strong: true },
-  { x: 2026.69, y: 641332, label: 'Navier–Stokes (OpenAI): 0.64M' },
-  { x: 2026.74, y: 4722013 },
-  { x: 2026.76, y: 3061775, label: 'Poincaré (Zhang et al.): 3.1M', dy: -3 },
-  { x: 2026.87, y: 7393782, label: 'Poincaré + geometrization (Qin et al.): 4.7M → 7.4M' },
+  { x: 2025.69, lines: 28407 },     // Strong PNT (Math Inc)
+  { x: 2026.17, lines: 180661 },    // Sphere packing (Math Inc)
+  { x: 2026.63, lines: 13499380 },  // Fermat's Last Theorem (Claude)
+  { x: 2026.69, lines: 641332 },    // Navier-Stokes (OpenAI)
+  { x: 2026.74, lines: 4722013 },   // Poincare v0.1.3 (Qin et al.)
+  { x: 2026.76, lines: 3061775 },   // Poincare (Zhang et al.)
+  { x: 2026.87, lines: 2671769 },   // Poincare + geometrization (Qin et al.), growth since v0.1.3
 ];
+const TODAY = 2026.88;
 
-const REFERENCE = [
-  { y: 43920947, label: 'Linux kernel: 43.9M', side: 'above' },
-  { y: 3123590, label: 'CPython: 3.1M', side: 'above' },
-  { y: 2147254, label: 'FFmpeg: 2.1M', side: 'below' },
-];
-
-// Least-squares quadratic fit of log10(lines) vs t = year - 2026 over the AI points.
-const FIT = { a: 5.0653, b: 2.0833, c: -0.0610 };
-
+// The chart opens on Mathlib alone, on an axis that tops out at 3M. One click
+// (a Reveal fragment) zooms the axis out to 26M, which is what it takes to fit
+// the AI-written total.
 function drawLeanLoc(host) {
-  const W = 840, H = 400, m = { top: 12, right: 20, bottom: 40, left: 62 };
-  const x0 = 2017.5, x1 = 2027, y0 = 4, y1 = 8; // y in log10
-  const px = (x) => m.left + ((x - x0) / (x1 - x0)) * (W - m.left - m.right);
-  const py = (v) => m.top + ((y1 - Math.log10(v)) / (y1 - y0)) * (H - m.top - m.bottom);
-  const right = W - m.right, bottom = H - m.bottom;
+  const W = 840, H = 500, m = { top: 16, right: 20, bottom: 40, left: 54 };
+  const x0 = 2017.5, x1 = 2027, BEFORE = 3e6, AFTER = 26e6;
+  const right = W - m.right, bottom = H - m.bottom, plotH = bottom - m.top;
+  let yMax = BEFORE;
+  const px = (x) => m.left + ((x - x0) / (x1 - x0)) * (right - m.left);
+  const py = (v) => m.top + (1 - v / yMax) * plotH;
+  const clamp = (n) => Math.max(0, Math.min(1, n));
 
   const root = svg('svg', { viewBox: `0 0 ${W} ${H}`, class: 'chart-svg', role: 'img',
-    'aria-label': 'Lines of Lean per project over time, on a log scale' }, host);
+    'aria-label': 'Total lines of Lean over time: Mathlib compared with AI-written formalizations' }, host);
+  const clip = svg('clipPath', { id: 'leanloc-plot' }, svg('defs', {}, root));
+  svg('rect', { x: m.left, y: 0, width: right - m.left + 12, height: bottom + 2 }, clip);
 
-  // reference codebases
-  for (const ref of REFERENCE) {
-    const y = r1(py(ref.y));
-    svg('line', { class: 'c-ref', x1: m.left, x2: right, y1: y, y2: y }, root);
-    svg('text', { class: 'c-label c-halo', x: m.left + 8, y: ref.side === 'above' ? y - 7 : y + 18 }, root, ref.label);
-  }
-
-  // axes
-  svg('path', { class: 'c-axis', d: `M${m.left},${m.top} V${bottom} H${right}` }, root);
-  [['10k', 1e4], ['100k', 1e5], ['1M', 1e6], ['10M', 1e7], ['100M', 1e8]].forEach(([label, v]) => {
-    const y = r1(py(v));
-    svg('line', { class: 'c-axis', x1: m.left - 5, x2: m.left, y1: y, y2: y }, root);
-    svg('text', { class: 'c-tick', x: m.left - 10, y: y + 5, 'text-anchor': 'end' }, root, label);
+  // y ticks for both ends of the zoom; render() moves and fades them
+  const ticks = [[1e6, 'near'], [2e6, 'near'], [3e6, 'near'],
+    [5e6, 'far'], [10e6, 'far'], [15e6, 'far'], [20e6, 'far'], [25e6, 'far']].map(([v, when]) => {
+    const g = svg('g', {}, root);
+    svg('line', { class: 'c-grid', x1: m.left, x2: right, y1: 0, y2: 0 }, g);
+    svg('text', { class: 'c-tick', x: m.left - 10, y: 5, 'text-anchor': 'end' }, g, `${v / 1e6}M`);
+    return { v, when, g };
   });
+  svg('text', { class: 'c-tick', x: m.left - 10, y: bottom + 5, 'text-anchor': 'end' }, root, '0');
+  svg('path', { class: 'c-axis', d: `M${m.left},${m.top} V${bottom} H${right}` }, root);
   for (let year = 2018; year <= 2026; year += 2) {
     const x = r1(px(year));
     svg('line', { class: 'c-axis', x1: x, x2: x, y1: bottom, y2: bottom + 5 }, root);
     svg('text', { class: 'c-tick', x, y: bottom + 24, 'text-anchor': 'middle' }, root, String(year));
   }
-  const midY = (m.top + bottom) / 2;
-  svg('text', { class: 'c-axis-title', x: 16, y: midY, 'text-anchor': 'middle',
-    transform: `rotate(-90 16 ${midY})` }, root, 'Lines of Lean (log scale)');
 
-  // mathlib: the largest Lean project until 2026
-  const line = MATHLIB.map(([x, v], i) => `${i ? 'L' : 'M'}${r1(px(x))},${r1(py(v))}`).join('');
-  svg('path', { class: 'c-line c-s1 c-draw', d: line, pathLength: 1 }, root);
-  const ml = svg('text', { class: 'c-label c-strong c-halo c-late', x: px(2020.1), y: py(4.4e5) - 8, 'text-anchor': 'middle' }, root);
-  svg('tspan', { x: r1(px(2019.35)) }, ml, 'mathlib');
-  svg('tspan', { x: r1(px(2019.35)), dy: 18 }, ml, '(2.5M lines today)');
-  svg('text', { class: 'c-label c-minor c-halo c-late', x: px(2023.4), y: py(1.25e6) - 8, 'text-anchor': 'end' }, root, 'Lean 4 port');
+  // Mathlib: the largest human-written Lean project
+  const human = svg('path', { class: 'c-line c-s1 c-draw', pathLength: 1 }, root);
+  const humanLabel = svg('text', { class: 'c-label c-strong c-halo c-late', x: r1(px(2026.25)),
+    'text-anchor': 'end' }, root, 'Mathlib (human-written)');
+  const lastHuman = MATHLIB[MATHLIB.length - 1][1];
 
-  // AI-driven formalizations
-  const ai = svg('g', { class: 'c-after' }, root);
-  let d = '';
-  for (let i = 0; i <= 30; i++) {
-    const x = 2025.69 + (i / 30) * (2027 - 2025.69), t = x - 2026;
-    d += `${i ? 'L' : 'M'}${r1(px(x))},${r1(py(10 ** (FIT.a + FIT.b * t + FIT.c * t * t)))}`;
-  }
-  svg('path', { class: 'c-fit c-s2', d }, ai);
-  svg('line', { class: 'c-link c-s2', x1: px(2026.74), y1: py(4722013), x2: px(2026.87), y2: py(7393782) }, ai);
-  AI.forEach((p, i) => {
-    const g = svg('g', { class: 'c-point', style: `--i:${i}` }, ai);
-    if (p.label) {
-      svg('text', { class: `c-label c-halo${p.strong ? ' c-strong' : ''}`, x: r1(px(p.x) - 11),
-        y: r1(py(p.y) + 5 + (p.dy || 0)), 'text-anchor': 'end' }, g, p.label);
-    }
-    svg('circle', { class: 'c-dot c-s2', cx: r1(px(p.x)), cy: r1(py(p.y)), r: 5.5 }, g);
+  // AI-written: running total, stepping up as each project lands
+  let total = 0, flt = null;
+  const steps = AI.map((p) => {
+    if (p.lines > 1e7) flt = { x: p.x, mid: total + p.lines / 2 };
+    total += p.lines;
+    return { x: p.x, total };
   });
+  const ai = svg('g', { class: 'fragment zoom', 'data-fragment-index': 0 }, root);
+  const aiLine = svg('path', { class: 'c-line c-s2', 'clip-path': 'url(#leanloc-plot)' }, ai);
+  const aiNotes = svg('g', {}, ai);
+  const aiDot = svg('circle', { class: 'c-dot c-s2', cx: r1(px(TODAY)), r: 5.5 }, aiNotes);
+  const aiLabel = svg('text', { class: 'c-label c-strong c-halo', x: r1(px(TODAY) - 13),
+    'text-anchor': 'end' }, aiNotes, 'AI-written formalizations');
+  const fltLabel = svg('text', { class: 'c-label c-halo', x: r1(px(flt.x) - 12),
+    'text-anchor': 'end' }, aiNotes, 'Fermat’s Last Theorem (Claude): 13.5M');
+
+  // t = 0: zoomed in on Mathlib. t = 1: zoomed out to the AI total.
+  function render(t) {
+    yMax = BEFORE * (AFTER / BEFORE) ** t;
+    for (const tick of ticks) {
+      const y = py(tick.v);
+      const fade = tick.when === 'near' ? clamp(1 - t * 2.5) : clamp((t - 0.45) / 0.4);
+      tick.g.setAttribute('transform', `translate(0 ${r1(y)})`);
+      tick.g.style.opacity = y < m.top - 1 ? 0 : fade;
+    }
+    human.setAttribute('d', MATHLIB.map(([x, v], i) => `${i ? 'L' : 'M'}${r1(px(x))},${r1(py(v))}`).join(''));
+    humanLabel.setAttribute('y', r1(py(lastHuman) - 14));
+
+    let d = `M${r1(px(AI[0].x))},${r1(py(0))}`;
+    for (const s of steps) d += ` H${r1(px(s.x))} V${r1(py(s.total))}`;
+    aiLine.setAttribute('d', `${d} H${r1(px(TODAY))}`);
+    aiLine.style.opacity = clamp(t / 0.12);
+    aiDot.setAttribute('cy', r1(py(total)));
+    aiLabel.setAttribute('y', r1(py(total) + 5));
+    fltLabel.setAttribute('y', r1(py(flt.mid) + 5));
+    aiNotes.style.opacity = clamp((t - 0.8) / 0.2);
+  }
+
+  // Follow the fragment's state, whichever way Reveal gets there.
+  let t = 0, frame = null;
+  function zoomTo(target) {
+    cancelAnimationFrame(frame);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { t = target; render(t); return; }
+    const from = t, start = performance.now(), duration = 1100 * Math.abs(target - from);
+    if (!duration) return;
+    const tick = (now) => {
+      const k = clamp((now - start) / duration);
+      const eased = k < 0.5 ? 4 * k * k * k : 1 - ((-2 * k + 2) ** 3) / 2;
+      t = from + (target - from) * eased;
+      render(t);
+      if (k < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+  }
+  new MutationObserver(() => zoomTo(ai.classList.contains('visible') ? 1 : 0))
+    .observe(ai, { attributes: true, attributeFilter: ['class'] });
+  render(0);
 }
 
 /* ------------------------------------------------------------------ */
 /* Chart 2: search interest, Lean vs. software verification            */
-/* Data: plots/data/*-trends-smooth.csv (raw monthly value, LOWESS)    */
+/* Data: plots/data/*-trends-smooth.csv (the LOWESS-smoothed column)   */
 /* ------------------------------------------------------------------ */
 
 // One entry per month from Nov 2024 to Sep 2026.
 const TRENDS = [
   {
     name: '“software verification”', cls: 'c-s2',
-    raw: [7, 6, 8, 10, 12, 11, 17, 33, 49, 51, 67, 49, 46, 42, 49, 74, 84, 75, 83, 100, 56, 21, 76],
     smooth: [5.49, 6.98, 8.55, 10.23, 12.19, 17.03, 24.16, 32.95, 42.26, 48.55, 50.98, 50.61, 50.12,
       52.6, 58.57, 65.54, 73.49, 78.15, 75.84, 73.82, 72.71, 70.98, 69.22],
   },
   {
     name: '“Lean programming language”', cls: 'c-s1',
-    raw: [0, 0, 23, 0, 0, 28, 23, 50, 28, 40, 35, 0, 0, 28, 40, 33, 63, 43, 80, 75, 53, 65, 100],
     smooth: [0.17, 3.29, 6.67, 10.55, 14.4, 19.95, 26.46, 32.19, 33.91, 29.98, 23.64, 21.04, 20.8,
       23.68, 32.4, 42.06, 50.86, 58.21, 62.56, 66.73, 72.56, 77.98, 83.34],
   },
@@ -148,7 +177,7 @@ function spline(points) {
 }
 
 function drawTrends(host) {
-  const W = 840, H = 400, m = { top: 12, right: 20, bottom: 40, left: 62 };
+  const W = 840, H = 500, m = { top: 16, right: 20, bottom: 40, left: 62 };
   const px = (i) => m.left + (i / 22) * (W - m.left - m.right);
   const py = (v) => m.top + ((105 - v) / 105) * (H - m.top - m.bottom);
   const right = W - m.right, bottom = H - m.bottom;
@@ -171,11 +200,6 @@ function drawTrends(host) {
   svg('text', { class: 'c-axis-title', x: 16, y: midY, 'text-anchor': 'middle',
     transform: `rotate(-90 16 ${midY})` }, root, 'Search interest (peak = 100)');
 
-  // raw monthly values, then the smoothed lines on top
-  const dots = svg('g', { class: 'c-early' }, root);
-  for (const s of TRENDS) {
-    s.raw.forEach((v, i) => svg('circle', { class: `c-raw ${s.cls}`, cx: r1(px(i)), cy: r1(py(v)), r: 3.6 }, dots));
-  }
   for (const s of TRENDS) {
     svg('path', { class: `c-line ${s.cls} c-draw`, pathLength: 1,
       d: spline(s.smooth.map((v, i) => [px(i), py(v)])) }, root);
