@@ -40,7 +40,7 @@ html, body { background: var(--bg); }
   padding: 0;
 }
 .reveal ul, .reveal ol { list-style: none; display: block; }
-.reveal em { font-style: italic; }
+.reveal em, .reveal i { font-style: italic; }
 .reveal b { font-weight: 600; }
 .reveal svg { display: block; overflow: visible; }
 
@@ -282,30 +282,51 @@ html, body { background: var(--bg); }
 /* --- Why us ------------------------------------------------------------ */
 
 .people { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; min-height: 0; }
-.person { box-sizing: border-box; padding: 32px 34px 24px; border-radius: 20px; background: var(--fill); }
-.person h3 { display: flex; align-items: center; gap: 20px; font-size: 58px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
-.avatar {
-  flex: none;
-  width: 70px;
-  height: 70px;
+.person { box-sizing: border-box; padding: 30px 38px 24px; border-radius: 20px; background: var(--fill); }
+.person h3 { font-size: 58px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+
+/* Timeline: most recent at the top, marked in the brand color. */
+.reveal .slides section .timeline.fragment { transform: translateY(12px); transition: opacity 0.35s ease, transform 0.5s var(--ease); }
+.reveal .slides section .timeline.fragment.visible { transform: none; }
+.reveal .timeline { display: grid; row-gap: 18px; margin-top: 26px; }
+.timeline li { position: relative; padding-left: 36px; }
+.timeline b { display: block; font-size: 28px; letter-spacing: -0.03em; line-height: 1.1; }
+.timeline .job { display: block; margin-top: 5px; font-size: 21px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
+.timeline .did { display: block; margin-top: 4px; font-size: 19px; line-height: 1.28; color: var(--ink-2); text-wrap: pretty; }
+.timeline li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--ink);
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--ink);
-  color: #fff;
-  font-size: 30px;
-  letter-spacing: 0;
+  background: var(--fill);
 }
-.person + .person .avatar { background: var(--accent); }
-.reveal .slides section .cv.fragment { transform: translateY(12px); transition: opacity 0.35s ease, transform 0.5s var(--ease); }
-.reveal .slides section .cv.fragment.visible { transform: none; }
-.cv { margin-top: 30px; }
-.reveal .orgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.orgs li { padding: 22px 24px 23px; border-radius: 16px; background: #fff; font-size: 19px; line-height: 1.25; color: var(--ink-2); }
-.orgs b { display: block; margin-bottom: 6px; font-size: 30px; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); }
-.lines { margin-top: 8px; }
-.lines li { padding: 20px 2px; font-size: 25px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.22; text-wrap: pretty; }
-.lines li + li { border-top: 1px solid var(--line); }
+.timeline li:first-child::before { border-color: var(--accent); background: var(--accent); }
+/* A solid line joins the entries. Below the last one, a short dotted tail
+   fades out (it goes back further). */
+.timeline li::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 27px;
+  bottom: -21px;
+  width: 2px;
+  background: #cbcbd2;
+}
+.timeline li:last-child::after {
+  left: 6px;
+  top: 28px;
+  bottom: auto;
+  width: 4px;
+  height: 34px;
+  background: radial-gradient(circle, #a9a9b3 1.6px, transparent 1.9px) center top / 4px 9px repeat-y;
+  -webkit-mask-image: linear-gradient(#000 20%, transparent);
+  mask-image: linear-gradient(#000 20%, transparent);
+}
 
 /* --- Pyramid ----------------------------------------------------------- */
 
