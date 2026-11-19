@@ -221,6 +221,19 @@ html, body { background: var(--bg); }
 .slop .t2 .hl { color: var(--accent-on-dark); }
 .slop .t3 { background-color: var(--accent-soft); }
 
+/* --- Trust: three tiles in a row --------------------------------------- */
+
+.trust .bento { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); }
+.trust .tile { justify-content: flex-start; padding: 32px 34px 36px; }
+.trust .tile h3 { margin-bottom: auto; font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink-2); }
+.trust .tile.inverse h3 { color: #b6b6bf; }
+.trust .tile p { font-size: 42px; line-height: 1.08; letter-spacing: -0.034em; text-wrap: balance; }
+.trust .t2 { background-color: var(--accent-soft); }
+.trust .bento { grid-template-rows: minmax(0, 1fr) auto; }
+.trust .t4 { grid-column: 1 / -1; justify-content: center; padding: 30px 34px; background-color: var(--accent); color: #fff; }
+.trust .t4 p { font-size: 40px; }
+.trust .t4 b { font-weight: 600; }
+
 /* --- Screenshot slide -------------------------------------------------- */
 
 /* One block: the prompt above its screenshot on the left, the two verdict
@@ -311,12 +324,12 @@ html, body { background: var(--bg); }
 
 /* --- From today's practice to verified code ---------------------------- */
 
-.pathway-body { display: flex; flex-direction: column; justify-content: center; gap: 34px; }
-.pathway .lead { font-size: 34px; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; }
+.pathway-body { display: flex; flex-direction: column; justify-content: center; gap: 56px; }
+.pathway .takeaway { max-width: 980px; font-size: 38px; font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; text-wrap: balance; }
 
 /* Left bank: current practice. Right: specifications on three supports.
    The bridge between them is property-based testing. */
-.crossing { display: grid; grid-template-columns: 300px minmax(0, 1fr) 440px; grid-template-rows: 260px auto; }
+.crossing { display: grid; grid-template-columns: 300px minmax(0, 1fr) 440px; grid-template-rows: 260px; }
 .bank, .deck, .slab, .pillars li { display: grid; place-items: center; text-align: center; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
 .bank { z-index: 1; padding: 0 28px; border-radius: 18px; background: var(--ink); color: #fff; font-size: 28px; }
 .bridge { position: relative; }
@@ -341,36 +354,6 @@ html, body { background: var(--bg); }
 .present .arch { animation: appear 0.5s ease 1.3s both; }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes span { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
-
-/* The bracket covers everything but current practice, then grows to cover
-   that too. 300px = the width of the left bank. */
-.reach { grid-column: 1 / -1; position: relative; height: 84px; margin-top: 20px; }
-.reveal .slides section .fragment.extend { opacity: 1; visibility: inherit; }
-.reach-line {
-  position: absolute;
-  right: 0;
-  top: 0;
-  box-sizing: border-box;
-  width: calc(100% - 300px);
-  height: 16px;
-  border: 3px solid var(--ink);
-  border-top: 0;
-  border-radius: 0 0 8px 8px;
-  transition: width 0.55s cubic-bezier(0.6, 0, 0.2, 1);
-}
-.reach-line.visible { width: 100%; }
-.reach-label {
-  position: absolute;
-  top: 34px;
-  left: calc(300px + (100% - 300px) / 2);
-  transform: translateX(-50%);
-  font-size: 29px;
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
-  white-space: nowrap;
-}
-.reach-label.fade-in { left: 50%; }
 
 /* --- Key activities: two sides ----------------------------------------- */
 

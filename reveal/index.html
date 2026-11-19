@@ -71,10 +71,35 @@
     </div>
   </section>
 
+  <!-- The warning: pushing formal methods without teaching what a proof does
+       and doesn't cover. Three tiles fill in one per click. -->
+  <section class="trust">
+    <div class="frame">
+      <header><h2>Formal Methods Without Education Breeds <span class="hl">False Confidence</span></h2></header>
+      <ul class="bento">
+        <li class="tile fragment fill t1">
+          <h3>What the tool says</h3>
+          <p>The proofs check.</p>
+        </li>
+        <li class="tile fragment fill t2">
+          <h3>What people hear</h3>
+          <p>The software is correct.</p>
+        </li>
+        <li class="tile fragment fill t3 inverse">
+          <h3>What we get</h3>
+          <p>Less scrutiny, and a <span class="hl">false sense of security</span>.</p>
+        </li>
+        <li class="tile fragment fill t4">
+          <p>When we see the first hack of a “formally verified” system, <b>we lose</b>.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
   <!-- Slop: four tiles that fill in one per click. -->
   <section class="slop">
     <div class="frame">
-      <header><h2>Examples of Formal Slop</h2></header>
+      <header><h2>Examples of Risks</h2></header>
       <ul class="bento">
         <li class="tile fragment fill t1">
           <p>The formal model is <span class="hl">not checked</span> against the real implementation.</p>
@@ -92,81 +117,6 @@
     </div>
   </section>
 
-  <!-- The slide title is the prompt, so it is drawn as one, above its result. -->
-  <section class="demo">
-    <div class="frame">
-      <div class="prompt-box">
-        <h2>Claude, make me a verified Minecraft in Lean</h2>
-        <span class="send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span>
-      </div>
-      <div class="shot"><img src="assets/fox.png" alt="Screenshot of a Minecraft-like block world with a fox, rendered by the Lean program"></div>
-      <ul class="verdict">
-        <li class="tile">
-          <h3>On the surface</h3>
-          <p>Looks great!</p>
-          <p>6,600 lines of Lean proofs.</p>
-        </li>
-        <li class="tile inverse">
-          <h3>Under the hood</h3>
-          <p>Rendering implemented in&nbsp;C, with no bridge to the theorems.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Why us: a timeline for each, most recent first. José's fills in on the
-       first click, Harry's on the second. -->
-  <section class="team">
-    <div class="frame">
-      <header><h2>Why us?</h2></header>
-      <div class="people">
-        <article class="person">
-          <h3>José</h3>
-          <ol class="timeline fragment">
-            <li>
-              <b><i>Independent</i></b>
-              <span class="job">Formal Methods Consultant</span>
-              <span class="did">Helping companies leverage formal methods tools.</span>
-            </li>
-            <li>
-              <b>Haskell Foundation</b>
-              <span class="job">Executive Director</span>
-              <span class="did">Ran the foundation.</span>
-            </li>
-            <li>
-              <b>University of Maryland</b>
-              <span class="job">Faculty</span>
-            </li>
-            <li>
-              <b>Galois</b>
-              <span class="job">Researcher</span>
-            </li>
-          </ol>
-        </article>
-        <article class="person">
-          <h3>Harry</h3>
-          <ol class="timeline fragment">
-            <li>
-              <b>University at Buffalo, SUNY</b>
-              <span class="job">Assistant Professor</span>
-              <span class="did">Research and education on formal methods and testing.</span>
-            </li>
-            <li>
-              <b>University of Pennsylvania</b>
-              <span class="job">PhD Student</span>
-              <span class="did">Dissertation: <i>Property-Based Testing for the People</i>. Studied PL, HCI, and SE.</span>
-            </li>
-            <li>
-              <b>Cornell University</b>
-              <span class="job">Undergraduate Student</span>
-              <span class="did">Studied engineering leadership and entrepreneurship.</span>
-            </li>
-          </ol>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <!-- Part divider -->
   <section class="divider" data-state="st-accent">
     <div class="frame">
@@ -178,13 +128,11 @@
 
   <!-- From today's practice to verified code. Property-based testing is the
        bridge from current practice to specifications, which rest on modeling,
-       embedding, and semantics. One click stretches the bracket from "Lean"
-       to everything. -->
+       embedding, and semantics. -->
   <section class="pathway">
     <div class="frame">
-      <header><h2>From Today’s Practice to Formally Verified Code</h2></header>
+      <header><h2>Formal Methods that Engineers Understand</h2></header>
       <div class="pathway-body">
-        <p class="lead">Help engineers <em class="hl">understand the toolbox</em>:</p>
         <div class="crossing">
           <div class="bank">Current SE Practice</div>
           <div class="bridge">
@@ -202,12 +150,8 @@
               <li>Semantics</li>
             </ul>
           </div>
-          <div class="reach">
-            <div class="reach-line fragment extend" data-fragment-index="0"></div>
-            <p class="reach-label fragment fade-out" data-fragment-index="0">Can all be done in Lean</p>
-            <p class="reach-label fragment fade-in" data-fragment-index="0">Soon it will all be done in formal languages</p>
-          </div>
         </div>
+        <p class="takeaway">The path to trustworthy formal methods adoption requires better <em class="hl">training</em> and <em class="hl">foundational infrastructure</em>.</p>
       </div>
     </div>
   </section>
@@ -240,6 +184,31 @@
       </ul>
     </div>
   </section>
+
+  <!-- Minecraft demo, dropped for now. Remove this comment's opening and closing
+       markers to bring it back. The slide title is the prompt, so it is drawn as
+       one, above its result.
+  <section class="demo">
+    <div class="frame">
+      <div class="prompt-box">
+        <h2>Claude, make me a verified Minecraft in Lean</h2>
+        <span class="send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span>
+      </div>
+      <div class="shot"><img src="assets/fox.png" alt="Screenshot of a Minecraft-like block world with a fox, rendered by the Lean program"></div>
+      <ul class="verdict">
+        <li class="tile">
+          <h3>On the surface</h3>
+          <p>Looks great!</p>
+          <p>6,600 lines of Lean proofs.</p>
+        </li>
+        <li class="tile inverse">
+          <h3>Under the hood</h3>
+          <p>Rendering implemented in&nbsp;C, with no bridge to the theorems.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+  -->
 
   <!-- Tech transfer: "Today" first, "With Probity" on the click. -->
   <section class="transfer-slide">
@@ -311,6 +280,59 @@
             <path class="d-flow" d="M770,450 H1024 a20,20 0 0 0 20,-20 V398" marker-end="url(#arrowhead)"/>
           </g>
         </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why us: a timeline for each, most recent first. José's fills in on the
+       first click, Harry's on the second. -->
+  <section class="team">
+    <div class="frame">
+      <header><h2>Why us?</h2></header>
+      <div class="people">
+        <article class="person">
+          <h3>José</h3>
+          <ol class="timeline fragment">
+            <li>
+              <b><i>Independent</i></b>
+              <span class="job">Formal Methods Consultant</span>
+              <span class="did">Helping companies leverage formal methods tools.</span>
+            </li>
+            <li>
+              <b>Haskell Foundation</b>
+              <span class="job">Executive Director</span>
+              <span class="did">Ran the foundation.</span>
+            </li>
+            <li>
+              <b>University of Maryland</b>
+              <span class="job">Faculty</span>
+            </li>
+            <li>
+              <b>Galois</b>
+              <span class="job">Researcher</span>
+            </li>
+          </ol>
+        </article>
+        <article class="person">
+          <h3>Harry</h3>
+          <ol class="timeline fragment">
+            <li>
+              <b>University at Buffalo, SUNY</b>
+              <span class="job">Assistant Professor</span>
+              <span class="did">Research and education on formal methods and testing.</span>
+            </li>
+            <li>
+              <b>University of Pennsylvania</b>
+              <span class="job">PhD Student</span>
+              <span class="did">Dissertation: <i>Property-Based Testing for the People</i>. Studied PL, HCI, and SE.</span>
+            </li>
+            <li>
+              <b>Cornell University</b>
+              <span class="job">Undergraduate Student</span>
+              <span class="did">Studied engineering leadership and entrepreneurship.</span>
+            </li>
+          </ol>
+        </article>
       </div>
     </div>
   </section>
